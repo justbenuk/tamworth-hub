@@ -17,6 +17,7 @@ enum PermissionStatus {
   ACTIVE
   PENDING
   EXPIRED
+  REJECTED
 }
 
 model User {
@@ -100,9 +101,22 @@ model Business {
   owner       User?                @relation(fields: [userId], references: [id])
   permissions BusinessPermission[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  userId             String?
+  category           Category?          @relation(fields: [categoryId], references: [id])
+  categoryId         String?
+  businessCategories BusinessCategory[]
+}
+
+model Permission {
+  id          String  @id @default(cuid())
+  key         String  @unique // "jobs", "events", "premium_ads"
+  name        String // "Job Listings"
+  description String? // "Post job listings to TamworthHub"
+  isActive    Boolean @default(true)
+
+  businesses BusinessPermission[]
 }
 
 model BusinessPermission {
@@ -115,8 +129,31 @@ model BusinessPermission {
   status    PermissionStatus @default(ACTIVE)
   expiresAt DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  permission   Permission? @relation(fields: [permissionId], references: [id])
+  permissionId String?
 
   @@unique([businessId, feature])
+}
+
+model Category {
+  id                 String             @id @default(cuid())
+  name               String
+  slug               String             @unique
+  parentId           String?
+  parent             Category?          @relation("SubCategory", fields: [parentId], references: [id])
+  children           Category[]         @relation("SubCategory")
+  businesses         Business[]
+  businessCategories BusinessCategory[]
+}
+
+model BusinessCategory {
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  isPrimary  Boolean  @default(false)
+
+  @@id([businessId, categoryId])
 }
