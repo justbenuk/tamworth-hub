@@ -21,20 +21,21 @@ enum PermissionStatus {
 }
 
 model User {
-  id            String     @id
-  name          String
-  email         String
-  emailVerified Boolean    @default(false)
-  image         String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  role          String?    @default("user")
-  banned        Boolean?   @default(false)
-  banReason     String?
-  banExpires    DateTime?
-  sessions      Session[]
-  accounts      Account[]
-  businesses    Business[]
+  id              String           @id
+  name            String
+  email           String
+  emailVerified   Boolean          @default(false)
+  image           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  role            String?          @default("user")
+  banned          Boolean?         @default(false)
+  banReason       String?
+  banExpires      DateTime?
+  sessions        Session[]
+  accounts        Account[]
+  userPermissions UserPermission[]
+  businesses      Business[]       @relation("BusinessOwner")
 
   @@unique([email])
   @@map("user")
@@ -92,49 +93,49 @@ model Verification {
 model Business {
   id          String  @id @default(cuid())
   name        String
+  slug        String  @unique
   description String?
   address     String?
   phone       String?
   website     String?
 
-  ownerId     String
-  owner       User?                @relation(fields: [userId], references: [id])
-  permissions BusinessPermission[]
+  ownerId String
+  owner   User   @relation("BusinessOwner", fields: [ownerId], references: [id])
 
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  userId             String?
-  category           Category?          @relation(fields: [categoryId], references: [id])
-  categoryId         String?
-  businessCategories BusinessCategory[]
+  categories BusinessCategory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Permission {
   id          String  @id @default(cuid())
-  key         String  @unique // "jobs", "events", "premium_ads"
-  name        String // "Job Listings"
-  description String? // "Post job listings to TamworthHub"
+  key         String  @unique // "directory", "jobs", "events"
+  name        String // "Business Directory"
+  description String?
   isActive    Boolean @default(true)
 
-  businesses BusinessPermission[]
+  users UserPermission[]
 }
 
-model BusinessPermission {
+model UserPermission {
   id String @id @default(cuid())
 
-  businessId String
-  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  feature   FeatureType
-  status    PermissionStatus @default(ACTIVE)
-  expiresAt DateTime?
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id])
 
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  permission   Permission? @relation(fields: [permissionId], references: [id])
-  permissionId String?
+  status      PermissionStatus @default(PENDING)
+  expiresAt   DateTime?
+  grantedAt   DateTime?
+  grantedById String?
 
-  @@unique([businessId, feature])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, permissionId])
 }
 
 model Category {
@@ -144,8 +145,9 @@ model Category {
   parentId           String?
   parent             Category?          @relation("SubCategory", fields: [parentId], references: [id])
   children           Category[]         @relation("SubCategory")
-  businesses         Business[]
   businessCategories BusinessCategory[]
+  media              Media              @relation(fields: [mediaId], references: [id])
+  mediaId            String
 }
 
 model BusinessCategory {
@@ -156,4 +158,30 @@ model BusinessCategory {
   isPrimary  Boolean  @default(false)
 
   @@id([businessId, categoryId])
+}
+
+model Media {
+  id           String  @id @default(cuid())
+  filename     String
+  originalName String
+  url          String // UploadThing URL
+  key          String // UploadThing key for deletion
+  mimeType     String
+  size         Int // bytes
+  width        Int?
+  height       Int?
+  alt          String? // SEO alt text
+  caption      String?
+
+  // Organization
+  folder String? // e.g., "blog", "projects", "misc"
+  tags   String[] // e.g., ["hero", "landscape", "tech"]
+
+  // Metadata
+  uploadedBy String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  categories Category[]
+
+  @@map("media")
 }
