@@ -1,4 +1,5 @@
 import { FieldGroup, Field, FieldDescription } from "@/components/ui/field";
+import LoginForm from "@/features/authentication/forms/LoginForm";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -11,7 +12,7 @@ export default function LoginPage() {
             Fill in the form below to enter your account
           </p>
         </div>
-        form goes here
+        <LoginForm />
         <Field>
           <FieldDescription className="px-6 text-center">
             Don&apos;t have an account? <Link href="/register">Register</Link>
