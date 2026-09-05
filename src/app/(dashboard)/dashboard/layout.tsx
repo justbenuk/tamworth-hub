@@ -7,5 +7,7 @@ interface Props {
 
 export default async function ProfileLayout({ children }: Props) {
   await requireUser();
-  return <div>{children}</div>;
+  return (
+    <div className="flex flex-col justify-center min-h-screen">{children}</div>
+  );
 }

@@ -31,7 +31,7 @@ export default function LoginForm() {
 
     if (response.success) {
       toast.success("User Logged In");
-      router.replace("/profile");
+      router.replace("/dashboard");
       router.refresh();
     } else {
       toast.error("Failed to login user");
