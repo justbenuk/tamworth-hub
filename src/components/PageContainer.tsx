@@ -8,9 +8,9 @@ interface Props {
 }
 
 const sizes = {
-  large: "container mx-auto px-6 2xl:px-0",
-  medium: "max-w-7xl mx-auto w-full px-6 2xl:px-0",
-  small: "max-w-3xl w-full mx-auto px-6 2xl:px-0",
+  large: "container mx-auto px-6",
+  medium: "max-w-7xl mx-auto w-full px-6",
+  small: "max-w-3xl w-full mx-auto px-6",
 };
 
 export default function PageContainer({
