@@ -32,8 +32,8 @@ export default function RegisterForm() {
     const response = await RegisterUserAction(data);
 
     if (response.success) {
-      toast.success("User registered");
-      router.replace("/profile");
+      toast.success(response.message);
+      router.replace("/dashboard/profile");
       router.refresh();
     } else {
       toast.error("Failed to register user");

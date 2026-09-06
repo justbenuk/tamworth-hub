@@ -25,7 +25,7 @@ export async function RegisterUserAction(
       headers: await headers(),
     });
     revalidatePath("/", "layout");
-    return { success: true };
+    return { success: true, message: 'User registered' };
   } catch (error) {
     throw new Error(`Register User Error: ${error}`);
   }
@@ -47,7 +47,7 @@ export async function LoginUserAction(data: z.infer<typeof LoginUserSchema>) {
       headers: await headers(),
     });
     revalidatePath("/", "layout");
-    return { success: true };
+    return { success: true, message: 'User logged in' };
   } catch (error) {
     throw new Error(`Login User Error: ${error}`);
   }
