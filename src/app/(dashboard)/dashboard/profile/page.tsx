@@ -1,4 +1,5 @@
 import PageContainer from "@/components/PageContainer";
+import ChangePasswordCard from "@/features/profile/components/ChangePasswordCard";
 import UserCard from "@/features/profile/components/UserCard";
 import { FetchCurrentUserAction } from "@/features/profile/ProfileActions";
 import { redirect } from "next/navigation";
@@ -10,7 +11,7 @@ export default async function ProfilePage() {
     <PageContainer size="small">
       <div className="grid gap-6">
         <UserCard user={user} />
-        <div>change details</div>
+        <ChangePasswordCard />
         <div>password</div>
         <div>sessions</div>
         <div>groups</div>
