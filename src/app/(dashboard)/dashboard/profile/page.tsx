@@ -1,4 +1,5 @@
 import PageContainer from "@/components/PageContainer";
+import DeleteUserButton from "@/features/authentication/components/DeleteUserButton";
 import ChangePasswordCard from "@/features/profile/components/ChangePasswordCard";
 import DarkModeCard from "@/features/profile/components/DarkModeCard";
 import ListSessionsCard from "@/features/profile/components/ListSessionsCard";
@@ -18,8 +19,7 @@ export default async function ProfilePage() {
         <ListSessionsCard />
         <UserGroupsCard />
         <DarkModeCard />
-        <div>Manage 2fa</div>
-        <div>delete data</div>
+        <DeleteUserButton />
       </div>
     </PageContainer>
   );

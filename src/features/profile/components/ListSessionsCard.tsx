@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,7 +23,6 @@ export default async function ListSessionsCard() {
       <CardContent>
         <CurrentUserSessionsTable sessions={sessions} />
       </CardContent>
-      <CardFooter>all</CardFooter>
     </Card>
   );
 }
