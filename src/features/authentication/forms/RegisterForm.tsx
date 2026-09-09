@@ -33,7 +33,7 @@ export default function RegisterForm() {
 
     if (response.success) {
       toast.success(response.message);
-      router.replace("/profile");
+      router.replace("/dashboard/profile");
       router.refresh();
     } else {
       toast.error(response.message);

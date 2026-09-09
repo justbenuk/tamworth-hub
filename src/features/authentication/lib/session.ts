@@ -7,6 +7,7 @@ export const getSession = cache(async () => {
   try {
     return await auth.api.getSession({
       headers: await headers(),
+      query: { disableCookieCache: true },
     });
   } catch (error) {
     unstable_rethrow(error);

@@ -4,9 +4,8 @@ import { User } from "@prisma/client";
 import Image from "next/image";
 
 export default function UserCard({ user }: { user: User }) {
-  console.log(user);
   return (
-    <Card className="mt-30">
+    <Card className="">
       <CardContent className="grid grid-cols-1 lg:grid-cols-2">
         <div className="flex flex-row items-center justify-center">
           <Image
