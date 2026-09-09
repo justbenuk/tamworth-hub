@@ -30,11 +30,11 @@ export default function LoginForm() {
     const response = await LoginUserAction(data);
 
     if (response.success) {
-      toast.success("User Logged In");
+      toast.success(response.message);
       router.replace("/dashboard");
       router.refresh();
     } else {
-      toast.error("Failed to login user");
+      toast.error(response.message);
     }
   }
 

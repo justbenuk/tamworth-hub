@@ -12,7 +12,6 @@ export default async function ProfilePage() {
       <div className="grid gap-6">
         <UserCard user={user} />
         <ChangePasswordCard />
-        <div>password</div>
         <div>sessions</div>
         <div>groups</div>
         <div>dark mode</div>
