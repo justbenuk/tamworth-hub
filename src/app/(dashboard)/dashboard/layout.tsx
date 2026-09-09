@@ -15,7 +15,7 @@ export default async function ProfileLayout({ children }: Props) {
       <DashboardSidebar variant="inset" />
       <SidebarInset>
         <DashboardSidebarHeader />
-        <div className="mt-10">{children}</div>
+        <div>{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

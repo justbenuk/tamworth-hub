@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function UserCard({ user }: { user: User }) {
   return (
-    <Card className="">
+    <Card>
       <CardContent className="grid grid-cols-1 lg:grid-cols-2">
         <div className="flex flex-row items-center justify-center">
           <Image

@@ -47,7 +47,7 @@ export default function ChangePasswordForm() {
       className="grid gap-3 mt-3"
       id="changePassword"
     >
-      <div className="flex flex-row items-center justify-evenly gap-10">
+      <div className="flex flex-col lg:flex-row items-center justify-evenly gap-10">
         <Controller
           name="currentPassword"
           control={form.control}

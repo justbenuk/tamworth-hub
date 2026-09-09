@@ -1,7 +1,9 @@
 import PageContainer from "@/components/PageContainer";
 import ChangePasswordCard from "@/features/profile/components/ChangePasswordCard";
+import DarkModeCard from "@/features/profile/components/DarkModeCard";
 import ListSessionsCard from "@/features/profile/components/ListSessionsCard";
 import UserCard from "@/features/profile/components/UserCard";
+import UserGroupsCard from "@/features/profile/components/UserGroupsCard";
 import { FetchCurrentUserAction } from "@/features/profile/ProfileActions";
 import { redirect } from "next/navigation";
 
@@ -9,13 +11,13 @@ export default async function ProfilePage() {
   const user = await FetchCurrentUserAction();
   if (!user) redirect("/login");
   return (
-    <PageContainer size="medium">
+    <PageContainer size="medium" className="py-20">
       <div className="grid gap-6">
         <UserCard user={user} />
         <ChangePasswordCard />
         <ListSessionsCard />
-        <div>groups</div>
-        <div>dark mode</div>
+        <UserGroupsCard />
+        <DarkModeCard />
         <div>Manage 2fa</div>
         <div>delete data</div>
       </div>
