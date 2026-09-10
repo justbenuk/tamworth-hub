@@ -5,6 +5,7 @@ import { RegisterUserSchema, LoginUserSchema } from "./AuthSchema";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { db } from "@/lib/db";
 
 //-----
 //Register User
@@ -15,7 +16,7 @@ export async function RegisterUserAction(
 ) {
   try {
     const validated = RegisterUserSchema.parse(data);
-    await auth.api.signUpEmail({
+    const response = await auth.api.signUpEmail({
       body: {
         name: validated.name,
         email: validated.email,
@@ -24,10 +25,24 @@ export async function RegisterUserAction(
       },
       headers: await headers(),
     });
+
+    await db.activityLog.create({
+      data: {
+        userId: response.user.id,
+        feature: "Authentication",
+        action: "Access",
+        description: "User Registered",
+      },
+    });
+
     revalidatePath("/", "layout");
-    return { success: true, message: 'User registered' };
+    return { success: true, message: "User registered" };
   } catch (error) {
-    throw new Error(`Register User Error: ${error}`);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Failed to register user",
+    };
   }
 }
 
@@ -39,16 +54,29 @@ export async function LoginUserAction(data: z.infer<typeof LoginUserSchema>) {
   try {
     const validated = LoginUserSchema.parse(data);
 
-    await auth.api.signInEmail({
+    const response = await auth.api.signInEmail({
       body: {
         email: validated.email,
         password: validated.password,
       },
       headers: await headers(),
     });
+
+    await db.activityLog.create({
+      data: {
+        userId: response.user.id,
+        feature: "Authentication",
+        action: "Access",
+        description: "User Signed In",
+      },
+    });
+
     revalidatePath("/", "layout");
-    return { success: true, message: 'User logged in' };
+    return { success: true, message: "User logged in" };
   } catch (error) {
-    throw new Error(`Login User Error: ${error}`);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to log in",
+    };
   }
 }

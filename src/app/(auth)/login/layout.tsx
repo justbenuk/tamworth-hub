@@ -10,7 +10,7 @@ interface Props {
 }
 export default async function AuthLayout({ children }: Props) {
   const session = await getSession();
-  if (session?.user) redirect("/profile");
+  if (session?.user) redirect("/dashboard/profile");
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">

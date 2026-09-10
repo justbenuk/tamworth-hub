@@ -36,7 +36,7 @@ export default function RegisterForm() {
       router.replace("/dashboard/profile");
       router.refresh();
     } else {
-      toast.error("Failed to register user");
+      toast.error(response.message);
     }
   }
 

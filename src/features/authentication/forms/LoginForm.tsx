@@ -31,10 +31,10 @@ export default function LoginForm() {
 
     if (response.success) {
       toast.success(response.message);
-      router.replace("/dashboard/profile");
+      router.replace("/dashboard");
       router.refresh();
     } else {
-      toast.error("Failed to login user");
+      toast.error(response.message);
     }
   }
 
