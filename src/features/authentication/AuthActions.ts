@@ -36,7 +36,7 @@ export async function RegisterUserAction(
     });
 
     revalidatePath("/", "layout");
-    return { success: true, message: "User registered" };
+    return { success: true, message: "Verify Your Email" };
   } catch (error) {
     return {
       success: false,

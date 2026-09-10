@@ -1,5 +1,7 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { authClient } from "@/lib/auth-client";
 import { User } from "@prisma/client";
 import { CameraIcon } from "lucide-react";
 import Image from "next/image";
@@ -48,6 +50,20 @@ export default function UserCard({ user }: { user: User }) {
           <div>
             <span>Verified: </span>
             <span>{user.emailVerified ? "Yes" : "No"}</span>
+            {!user.emailVerified && (
+              <Button
+                variant={"link"}
+                className="text-primary-foreground text-xs underline"
+                onClick={async () => {
+                  await authClient.sendVerificationEmail({
+                    email: user.email,
+                    callbackURL: "/dashboard/profile",
+                  });
+                }}
+              >
+                Verify Now
+              </Button>
+            )}
           </div>
           <div>
             <span>Role: </span>

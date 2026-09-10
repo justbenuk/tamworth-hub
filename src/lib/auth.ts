@@ -3,6 +3,8 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { db } from "@/lib/db";
+import { resend, EMAIL_FROM } from "@/lib/email";
+import VerifyEmail from "../../emails/verify-email";
 
 const baseURL =
   process.env.BETTER_AUTH_URL ??
@@ -23,12 +25,26 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: false,
   },
   session: {
     cookieCache: {
       deferSessionRefresh: true,
       enabled: true,
       maxAge: 60,
+    },
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      void resend.emails.send({
+        from: EMAIL_FROM,
+        to: user.email,
+        subject: "Verify your email address",
+        react: VerifyEmail({
+          name: user.name,
+          url: url,
+        }),
+      });
     },
   },
   plugins: [admin(), nextCookies()],
