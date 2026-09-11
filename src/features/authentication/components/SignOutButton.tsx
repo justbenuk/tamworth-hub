@@ -19,7 +19,12 @@ export default function SignOutButton() {
     });
   }
   return (
-    <Button type="button" onClick={handleSignOut}>
+    <Button
+      type="button"
+      onClick={handleSignOut}
+      variant={"destructive"}
+      className="w-full flex items-center justify-items-start"
+    >
       <LockIcon />
       <span>Log Out</span>
     </Button>

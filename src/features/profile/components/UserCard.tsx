@@ -1,15 +1,22 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 import { User } from "@prisma/client";
-import { CameraIcon } from "lucide-react";
+import { CameraIcon, CheckCheckIcon, CheckIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function UserCard({ user }: { user: User }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-      <Card className="order-2 lg:order-1">
+      <Card>
         <CardContent>
           <Image
             src={user.image as string}
@@ -30,46 +37,58 @@ export default function UserCard({ user }: { user: User }) {
         </CardContent>
       </Card>
 
-      <Card
-        className="col-span-1 lg:col-span-3 lg:order-2 p-0 dark:grayscale"
-        style={{
-          backgroundImage: `url('/assets/town.jpg')`,
-          backgroundPosition: "center",
-        }}
-      >
-        <CardContent className="min-h-56 md:h-full p-0 m-0 space-0"></CardContent>
-        <CardFooter className="bg-primary dark:bg-primary border-0 text-primary-foreground font-semibold flex flex-col lg:flex-row lg:justify-evenly items-center gap-6">
-          <div>
-            <span>Name: </span>
-            <span>{user.name}</span>
+      <Card className="col-span-1 lg:col-span-3">
+        <CardHeader>
+          <CardTitle>Profile</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-row gap-4 items-center">
+              <span className="text-primary-foreground font-semibold">
+                Name:{" "}
+              </span>
+              <span>{user.name}</span>
+            </div>
+            <div className="flex flex-row gap-4 items-center">
+              <span className="text-primary-foreground font-semibold">
+                Email:{" "}
+              </span>
+              <span>{user.email}</span>
+            </div>
+            <div className="flex flex-row items-center gap-2">
+              <span className="text-primary-foreground font-semibold">
+                Verified:{" "}
+              </span>
+              <span>
+                {user.emailVerified ? (
+                  <CheckIcon className="size-4 text-green-500" />
+                ) : (
+                  <XIcon className="size-4 text-red-500" />
+                )}
+              </span>
+              {!user.emailVerified && (
+                <Button
+                  variant={"link"}
+                  className="text-primary-foreground text-xs underline"
+                  onClick={async () => {
+                    await authClient.sendVerificationEmail({
+                      email: user.email,
+                      callbackURL: "/dashboard/profile",
+                    });
+                  }}
+                >
+                  Verify Now
+                </Button>
+              )}
+            </div>
+            <div className="flex flex-row items-center gap-4">
+              <span className="text-primary-foreground font-semibold">
+                Role:{" "}
+              </span>
+              <Badge>{user.role}</Badge>
+            </div>
           </div>
-          <div>
-            <span>Email: </span>
-            <span>{user.email}</span>
-          </div>
-          <div>
-            <span>Verified: </span>
-            <span>{user.emailVerified ? "Yes" : "No"}</span>
-            {!user.emailVerified && (
-              <Button
-                variant={"link"}
-                className="text-primary-foreground text-xs underline"
-                onClick={async () => {
-                  await authClient.sendVerificationEmail({
-                    email: user.email,
-                    callbackURL: "/dashboard/profile",
-                  });
-                }}
-              >
-                Verify Now
-              </Button>
-            )}
-          </div>
-          <div>
-            <span>Role: </span>
-            <span>{user.role}</span>
-          </div>
-        </CardFooter>
+        </CardContent>
       </Card>
     </div>
   );

@@ -7,16 +7,29 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LayoutDashboardIcon, UserIcon } from "lucide-react";
+import { UserMenu } from "@/features/profile/components/UserMenu";
+import { auth } from "@/lib/auth";
+import { ChurchIcon, LayoutDashboardIcon, UserIcon } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
 import React from "react";
 
-export default function DashboardSidebar({
+export default async function DashboardSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) return null;
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>header</SidebarHeader>
+      <SidebarHeader>
+        <Link href={"/"} className="flex flex-row items-center gap-2">
+          <ChurchIcon className="size-4" />
+          Back to site
+        </Link>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -37,7 +50,9 @@ export default function DashboardSidebar({
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>footer</SidebarFooter>
+      <SidebarFooter>
+        <UserMenu user={session.user} />
+      </SidebarFooter>
     </Sidebar>
   );
 }
