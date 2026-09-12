@@ -12,7 +12,7 @@ export default async function ProfilePage() {
   const user = await FetchCurrentUserAction();
   if (!user) redirect("/login");
   return (
-    <PageContainer size="medium" className="py-20">
+    <PageContainer size="medium" className="py-10">
       <div className="grid gap-6">
         <UserCard user={user} />
         <ChangePasswordCard />
