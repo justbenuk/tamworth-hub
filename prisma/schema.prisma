@@ -25,6 +25,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   activityLogs  ActivityLog[]
+  medias        Media[]
 
   @@unique([email])
   @@map("user")
@@ -100,4 +101,40 @@ model ActivityLog {
   @@index([feature])
   @@index([userId])
   @@map("activity-log")
+}
+
+//--------------------------------------------
+//Media
+//--------------------------------------------
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
+
+model Media {
+  id String @id @default(cuid())
+
+  key     String  @unique
+  url     String
+  name    String?
+  alt     String?
+  caption String?
+
+  type     MediaType @default(IMAGE)
+  mimeType String?
+  size     Int?
+  width    Int?
+  height   Int?
+
+  uploadedById String?
+  uploadedBy   User?   @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([uploadedById])
+  @@index([type])
+  @@map("media")
 }
