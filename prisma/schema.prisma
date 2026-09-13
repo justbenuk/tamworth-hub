@@ -138,3 +138,23 @@ model Media {
   @@index([type])
   @@map("media")
 }
+
+//--------------------------------------------
+//Ward
+//--------------------------------------------
+
+model Ward {
+  id String @id @default(cuid())
+
+  name String
+  slug String
+
+  latitude  Float
+  longitude Float
+  gss       String
+  precision String @default("genralised")
+  geoJson   Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -53,7 +53,7 @@ export default async function PortalSidebar({
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href={"portal/wards"}>
+              <Link href={"/portal/wards"}>
                 <MapIcon />
                 <span>Wards</span>
               </Link>
