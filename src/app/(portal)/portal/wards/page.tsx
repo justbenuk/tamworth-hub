@@ -1,5 +1,7 @@
 import PageContainer from "@/components/PageContainer";
-import AllWardsTable from "@/features/portal/components/tables/AllWardsTable";
+import { Card, CardContent } from "@/components/ui/card";
+import WardDialog from "@/features/wards/components/WardDialog";
+import AllWardsTable from "@/features/wards/tables/AllWardsTable";
 import { FetchAllWardsAction } from "@/features/wards/WardActions";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
@@ -9,8 +11,13 @@ export default async function PortalWardsPage() {
   const wards = await FetchAllWardsAction();
   return (
     <PageContainer size="large" className="py-10">
-      <div>
-        <AllWardsTable wards={wards} />
+      <div className="grid gap-6">
+        <WardDialog />
+        <Card>
+          <CardContent>
+            <AllWardsTable wards={wards} />
+          </CardContent>
+        </Card>
       </div>
     </PageContainer>
   );
