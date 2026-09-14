@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import z from "zod";
-import { WardSchema } from "./WordSchemas";
+import { CouncilorSchema, WardSchema } from "./WordSchemas";
 import { requireAdmin } from "../authentication/lib/session";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -11,9 +11,32 @@ import slugify from "slugify";
 export async function FetchAllWardsAction() {
   return db.ward.findMany({
     include: {
-      councilors: true,
+      councillors: true,
     },
   });
+}
+
+export async function FetchAllCouncillorsAction() {
+  return db.councilor.findMany({
+    include: {
+      ward: true,
+    },
+  });
+}
+
+export async function AddCounillorAction(
+  data: z.infer<typeof CouncilorSchema>,
+) {
+  console.log(data);
+  return { success: false, message: "test function" };
+}
+
+export async function EditCounillorAction(
+  id: string,
+  data: z.infer<typeof CouncilorSchema>,
+) {
+  console.log(data);
+  return { success: false, message: "test function" };
 }
 
 export async function AddWardAction(data: z.infer<typeof WardSchema>) {

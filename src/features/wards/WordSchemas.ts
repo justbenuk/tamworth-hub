@@ -9,7 +9,7 @@ export const WardSchema = z.object({
   geoJson: z.json(),
 });
 
-export const CouncilorSchema = z.object({
+export const CouncillorSchema = z.object({
   name: z.string(),
   email: z.email(),
   faceboo: z.string().optional(),
