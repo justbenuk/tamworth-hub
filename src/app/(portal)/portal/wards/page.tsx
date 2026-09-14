@@ -12,7 +12,9 @@ export default async function PortalWardsPage() {
   return (
     <PageContainer size="large" className="py-10">
       <div className="grid gap-6">
-        <WardDialog />
+        <div className="flex flex-row items-center justify-end">
+          <WardDialog />
+        </div>
         <Card>
           <CardContent>
             <AllWardsTable wards={wards} />

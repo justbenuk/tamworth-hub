@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { UserMenu } from "@/features/profile/components/UserMenu";
 import { auth } from "@/lib/auth";
-import { ChurchIcon, LayoutDashboardIcon, MapIcon } from "lucide-react";
+import { ChurchIcon, LayoutDashboardIcon } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import React from "react";
@@ -20,6 +20,7 @@ import CharitiesMenu from "./menus/CharitiesMenu";
 import JobsMenu from "./menus/JobsMenu";
 import MessagesMenu from "./menus/MessagesMenu";
 import OtherMenu from "./menus/OtherMenu";
+import WardsMenu from "./menus/WardsMenu";
 
 export default async function PortalSidebar({
   ...props
@@ -51,20 +52,13 @@ export default async function PortalSidebar({
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href={"/portal/wards"}>
-                <MapIcon />
-                <span>Wards</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
         </SidebarGroup>
         <NewsMenu />
         <CrimeMenu />
         <EventsMenu />
         <CharitiesMenu />
         <JobsMenu />
+        <WardsMenu />
         <MessagesMenu />
         <OtherMenu />
       </SidebarContent>

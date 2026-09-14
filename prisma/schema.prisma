@@ -157,4 +157,25 @@ model Ward {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  councilors Councilor[]
+}
+
+model Councilor {
+  id String @id @default(cuid())
+
+  name      String
+  email     String
+  facebook  String?
+  twiiter   String?
+  instagram String?
+  linkdin   String?
+
+  party String
+  ward  Ward   @relation(fields: [wardId], references: [id])
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  contactNumber String?
+  wardId        String
 }

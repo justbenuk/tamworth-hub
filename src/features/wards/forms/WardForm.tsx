@@ -82,7 +82,7 @@ export default function WardForm(props: WardProps) {
       }
 
       toast.error(response.message);
-    } catch (error) {
+    } catch {
       toast.error(isEditing ? "Failed to update ward" : "Failed to add ward");
     }
   }

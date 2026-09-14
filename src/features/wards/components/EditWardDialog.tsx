@@ -6,16 +6,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
-import AddWardForm from "../forms/AddWardForm";
+import { EditIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Ward } from "@prisma/client";
+import EditWardForm from "../forms/EditWardForm";
 
-export default function WardDialog() {
+export default function EditWardDialog({ ward }: { ward: Ward }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size={"icon"}>
-          <Plus />
+        <Button size={"icon-xs"} variant={"ghost"} className="text-yellow-500">
+          <EditIcon />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -23,7 +24,7 @@ export default function WardDialog() {
           <DialogTitle>Add New Ward</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <AddWardForm />
+        <EditWardForm ward={ward} />
       </DialogContent>
     </Dialog>
   );
