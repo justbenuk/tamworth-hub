@@ -1,8 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useState } from "react";
 import type { Ward } from "@prisma/client";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 
 const WardMap = dynamic(() => import("./WardMap"), {
   ssr: false,
@@ -17,20 +18,34 @@ const WardMap = dynamic(() => import("./WardMap"), {
 });
 
 export default function WardListMapContainer({ wards }: { wards: Ward[] }) {
+  const router = useRouter();
   const [selectedId, setSelectedId] = useState("");
-  const selected = wards.find((ward) => ward.id === selectedId);
+  const [isNavigating, startNavigation] = useTransition();
   const sortedWards = [...wards].sort((a, b) => a.name.localeCompare(b.name));
+
+  function selectWard(id: string) {
+    setSelectedId(id);
+
+    const ward = wards.find((item) => item.id === id);
+    if (!ward) return;
+
+    startNavigation(() => {
+      router.push(`/wards/${ward.slug}`);
+    });
+  }
 
   return (
     <div className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight">
-          Explore By Ward
+          Explore by ward
         </h1>
         <p className="text-muted-foreground">
-          Select a ward on the map to see its details below.
+          Select a ward to view its latest news, crime information, jobs and
+          councillors.
         </p>
       </header>
+
       {wards.length === 0 ? (
         <div className="rounded-xl border p-8 text-muted-foreground">
           No wards have been added yet.
@@ -44,9 +59,10 @@ export default function WardListMapContainer({ wards }: { wards: Ward[] }) {
             <WardMap
               wards={wards}
               selectedId={selectedId}
-              onSelect={setSelectedId}
+              onSelectAction={selectWard}
             />
           </div>
+
           <div className="flex flex-wrap items-center gap-3">
             <label htmlFor="ward-selection" className="font-medium">
               Choose a ward
@@ -55,55 +71,30 @@ export default function WardListMapContainer({ wards }: { wards: Ward[] }) {
               id="ward-selection"
               className="min-w-56 rounded-md border bg-background px-3 py-2"
               value={selectedId}
-              onChange={(event) => setSelectedId(event.target.value)}
+              disabled={isNavigating}
+              onChange={(event) => selectWard(event.target.value)}
             >
-              <option value="">All wards</option>
+              <option value="">Select a ward</option>
               {sortedWards.map((ward) => (
                 <option key={ward.id} value={ward.id}>
                   {ward.name}
                 </option>
               ))}
             </select>
-            <span className="text-sm text-muted-foreground">
-              {wards.length} wards · Selected ward shown in orange
+            <span className="text-sm text-muted-foreground" aria-live="polite">
+              {isNavigating
+                ? "Opening ward…"
+                : `${wards.length} wards · Select a boundary to continue`}
             </span>
           </div>
-          <section
-            aria-live="polite"
-            aria-atomic="true"
-            className="rounded-xl border bg-card p-6"
-          >
-            {selected ? (
-              <>
-                <p className="text-sm text-muted-foreground">Selected ward</p>
-                <h2 className="mt-1 text-2xl font-semibold">{selected.name}</h2>
-                <dl className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {[
-                    ["GSS code", selected.gss || "Not provided"],
-                    ["Latitude", selected.latitude.toString()],
-                    ["Longitude", selected.longitude.toString()],
-                    [
-                      "Boundary precision",
-                      selected.precision || "Not provided",
-                    ],
-                  ].map(([label, value]) => (
-                    <div key={label}>
-                      <dt className="text-sm text-muted-foreground">{label}</dt>
-                      <dd className="mt-1 font-medium">{value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </>
-            ) : (
-              <div className="py-6 text-center">
-                <h2 className="text-xl font-semibold">Discover a ward</h2>
-                <p className="mt-2 text-muted-foreground">
-                  Click a boundary or marker, or choose a ward above to view its
-                  details.
-                </p>
-              </div>
-            )}
-          </section>
+
+          <div className="rounded-xl border border-dashed p-6 text-center">
+            <h2 className="text-xl font-semibold">Discover your ward</h2>
+            <p className="mt-2 text-muted-foreground">
+              Click a boundary or marker on the map, or choose a ward from the
+              list above.
+            </p>
+          </div>
         </>
       )}
     </div>

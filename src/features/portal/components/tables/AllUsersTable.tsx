@@ -6,7 +6,7 @@ import { Check, XIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function AllUsersTable({ users }: { users: User[] }) {
-  console.log(users);
+
   const columnDefs: ColDef<User>[] = [
     {
       field: "image",

@@ -58,5 +58,37 @@ export const ourFileRouter = {
         file: file.ufsUrl,
       };
     }),
+  councillorImageUploader: f({
+    image: {
+      maxFileSize: "32MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
+
+      if (!session?.user) throw new UploadThingError("Unauthorized");
+      return { userId: session.user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      const image = await db.media.create({
+        data: {
+          key: file.key,
+          url: file.ufsUrl,
+          name: file.name,
+          size: file.size,
+          mimeType: file.type,
+          type: "IMAGE",
+          uploadedById: metadata.userId,
+        },
+      });
+
+      return {
+        mediaId: image.id,
+        file: file.ufsUrl,
+      };
+    }),
 } satisfies FileRouter;
 export type OurFileRouter = typeof ourFileRouter;

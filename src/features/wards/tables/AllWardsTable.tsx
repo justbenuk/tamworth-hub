@@ -7,7 +7,7 @@ import DeleteWard from "../components/DeleteWard";
 
 type WardProps = Prisma.WardGetPayload<{
   include: {
-    councilors: true;
+    councillors: true;
   };
 }>;
 
@@ -18,9 +18,12 @@ export default function AllWardsTable({ wards }: { wards: WardProps[] }) {
       headerName: "Ward",
     },
     {
-      field: "councilors",
-      headerName: "Counilors",
-      valueGetter: (params) => params.data?.councilors.length ?? 0,
+      field: "councillors",
+      headerName: "Councillors",
+      valueGetter: (params) =>
+        params.data?.councillors.filter(
+          (councillor) => councillor.published === true,
+        ).length ?? 0,
     },
     {
       field: "longitude",

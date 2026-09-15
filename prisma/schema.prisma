@@ -131,8 +131,9 @@ model Media {
   uploadedById String?
   uploadedBy   User?   @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  councillor Councillor?
 
   @@index([uploadedById])
   @@index([type])
@@ -165,11 +166,16 @@ model Councillor {
   id String @id @default(cuid())
 
   name      String
+  slug      String
   email     String
   facebook  String?
-  twiiter   String?
+  twitter   String?
   instagram String?
-  linkdin   String?
+  linkedin  String?
+  published Boolean @default(false)
+
+  image   Media  @relation(fields: [imageId], references: [id])
+  imageId String @unique
 
   party String
   ward  Ward   @relation(fields: [wardId], references: [id])

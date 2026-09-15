@@ -23,7 +23,7 @@ export default function WardsMenu() {
         </SidebarMenuItem>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
-            <Link href={"portal/charities/categories"}>
+            <Link href={"/portal/councillors"}>
               <User2Icon />
               <span>Councillors</span>
             </Link>

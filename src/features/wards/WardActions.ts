@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import z from "zod";
-import { CouncilorSchema, WardSchema } from "./WordSchemas";
+import { CouncillorSchema, WardSchema } from "./WordSchemas";
 import { requireAdmin } from "../authentication/lib/session";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -11,29 +11,47 @@ import slugify from "slugify";
 export async function FetchAllWardsAction() {
   return db.ward.findMany({
     include: {
-      councillors: true,
+      councillors: {
+        include: {
+          image: true,
+        },
+      },
     },
   });
 }
 
 export async function FetchAllCouncillorsAction() {
-  return db.councilor.findMany({
+  return db.councillor.findMany({
     include: {
       ward: true,
+      image: true,
     },
   });
 }
 
-export async function AddCounillorAction(
-  data: z.infer<typeof CouncilorSchema>,
+export async function AddCouncillorAction(
+  data: z.infer<typeof CouncillorSchema>,
 ) {
-  console.log(data);
-  return { success: false, message: "test function" };
+  await requireAdmin();
+  const validated = CouncillorSchema.parse(data);
+  try {
+    await db.councillor.create({
+      data: {
+        slug: slugify(validated.name, {
+          lower: true,
+        }),
+        ...validated,
+      },
+    });
+  } catch {
+    return { success: false, message: "Failed to add Councillor" };
+  }
+  return { success: true, message: "Add Councillor" };
 }
 
 export async function EditCounillorAction(
   id: string,
-  data: z.infer<typeof CouncilorSchema>,
+  data: z.infer<typeof CouncillorSchema>,
 ) {
   console.log(data);
   return { success: false, message: "test function" };
