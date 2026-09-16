@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Prisma } from "@prisma/client";
-import { Edit2Icon, PlusIcon } from "lucide-react";
+import { EditIcon, PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ import { toast } from "sonner";
 import z from "zod";
 import {
   AddCouncillorAction,
-  EditCounillorAction,
+  EditCouncillorAction,
   FetchAllWardsAction,
 } from "../WardActions";
 import { CouncillorSchema } from "../WordSchemas";
@@ -116,7 +116,7 @@ export default function CouncillorForm(props: CouncillorProps) {
   async function handleSubmit(values: z.output<typeof CouncillorSchema>) {
     try {
       const response = isEditing
-        ? await EditCounillorAction(props.councillor.id, values)
+        ? await EditCouncillorAction(props.councillor.id, values)
         : await AddCouncillorAction(values);
 
       if (response.success) {
@@ -148,14 +148,15 @@ export default function CouncillorForm(props: CouncillorProps) {
       <DialogTrigger asChild>
         <Button
           type="button"
-          size="icon"
+          size={isEditing ? "icon-sm" : "icon"}
           aria-label={
             props.mode === "edit"
               ? `Edit ${props.councillor.name}`
               : "Add councillor"
           }
+          variant={isEditing ? "ghost" : null}
         >
-          {isEditing ? <Edit2Icon /> : <PlusIcon />}
+          {isEditing ? <EditIcon className="text-yellow-500" /> : <PlusIcon />}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">

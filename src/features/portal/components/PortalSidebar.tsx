@@ -13,14 +13,10 @@ import { ChurchIcon, LayoutDashboardIcon } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import React from "react";
-import NewsMenu from "./menus/NewsMenu";
-import CrimeMenu from "./menus/CrimeMenu";
-import EventsMenu from "./menus/EventsMenu";
-import CharitiesMenu from "./menus/CharitiesMenu";
-import JobsMenu from "./menus/JobsMenu";
 import MessagesMenu from "./menus/MessagesMenu";
 import OtherMenu from "./menus/OtherMenu";
 import WardsMenu from "./menus/WardsMenu";
+import PostsMenu from "./menus/PostsMenu";
 
 export default async function PortalSidebar({
   ...props
@@ -53,11 +49,7 @@ export default async function PortalSidebar({
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarGroup>
-        <NewsMenu />
-        <CrimeMenu />
-        <EventsMenu />
-        <CharitiesMenu />
-        <JobsMenu />
+        <PostsMenu />
         <WardsMenu />
         <MessagesMenu />
         <OtherMenu />

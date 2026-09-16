@@ -3,6 +3,8 @@ import TableContainer from "@/components/tables/TableContainer";
 import { Prisma } from "@prisma/client";
 import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import Image from "next/image";
+import EditCouncillorForm from "../forms/editCouncillorForm";
+import DeleteCouncillorButton from "../components/DeleteCouncillor";
 
 type CouncillorProps = Prisma.CouncillorGetPayload<{
   include: {
@@ -23,7 +25,7 @@ export default function AllCouncillorsTable({
       cellRenderer: (row: ICellRendererParams<CouncillorProps>) => (
         <div className="flex h-full items-center">
           <Image
-            src={row.data?.image.url || null}
+            src={row.data?.image.url || "/assets/progile.png"}
             alt={row.data?.name as string}
             width={30}
             height={30}
@@ -51,7 +53,10 @@ export default function AllCouncillorsTable({
     {
       headerName: "Actions",
       cellRenderer: (row: ICellRendererParams) => (
-        <div className="flex items-center h-full"></div>
+        <div className="flex items-center h-full">
+          <EditCouncillorForm councillor={row.data} />
+          <DeleteCouncillorButton id={row.data.id} />
+        </div>
       ),
     },
   ];

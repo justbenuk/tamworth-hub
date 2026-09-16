@@ -3,7 +3,7 @@ export const metadata: Metadata = {
   title: 'Councillors'
 };
 
-export async function CouncillorsPage() {
+export default function CouncillorsPage() {
   return (
     <div>saved</div>
   )

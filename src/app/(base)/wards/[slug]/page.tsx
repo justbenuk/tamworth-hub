@@ -18,32 +18,18 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cache } from "react";
 import Image from "next/image";
+import { FetchWardBySlug } from "@/features/wards/WardActions";
 
 type WardPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const getWard = cache((slug: string) =>
-  db.ward.findFirst({
-    where: { slug },
-    include: {
-      councillors: {
-        where: { published: true },
-        include: { image: true },
-        orderBy: { name: "asc" },
-      },
-    },
-  }),
-);
-
 export async function generateMetadata({
   params,
 }: WardPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const ward = await getWard(slug);
-
+  const ward = await FetchWardBySlug(slug)
   if (!ward) {
     return { title: "Ward not found" };
   }
@@ -56,7 +42,7 @@ export async function generateMetadata({
 
 export default async function WardPage({ params }: WardPageProps) {
   const { slug } = await params;
-  const ward = await getWard(slug);
+  const ward = await FetchWardBySlug(slug)
 
   if (!ward) {
     notFound();

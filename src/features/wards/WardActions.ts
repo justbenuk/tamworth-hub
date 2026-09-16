@@ -20,12 +20,32 @@ export async function FetchAllWardsAction() {
   });
 }
 
+export async function FetchWardBySlug(slug: string) {
+  return db.ward.findFirst({
+    where: { slug },
+    include: {
+      councillors: {
+        where: { published: true },
+        include: { image: true },
+        orderBy: { name: "asc" },
+      },
+    },
+  });
+}
+
 export async function FetchAllCouncillorsAction() {
   return db.councillor.findMany({
     include: {
       ward: true,
       image: true,
     },
+  });
+}
+
+export async function FetchCouncillorByIdAction(id: string) {
+  return db.councillor.findFirst({
+    where: { id },
+    include: { image: true },
   });
 }
 
@@ -49,12 +69,40 @@ export async function AddCouncillorAction(
   return { success: true, message: "Add Councillor" };
 }
 
-export async function EditCounillorAction(
+export async function EditCouncillorAction(
   id: string,
   data: z.infer<typeof CouncillorSchema>,
 ) {
-  console.log(data);
-  return { success: false, message: "test function" };
+  await requireAdmin();
+  const validated = CouncillorSchema.parse(data);
+  try {
+    await db.councillor.update({
+      where: { id },
+      data: {
+        ...validated,
+        slug: slugify(validated.name, {
+          lower: true,
+        }),
+      },
+    });
+  } catch {
+    return { success: false, message: "failed to update councillor" };
+  }
+  revalidatePath("/portal/councillors");
+  return { success: true, message: "councillor updated" };
+}
+
+export async function DeleteCouncillor(id: string) {
+  await requireAdmin();
+  try {
+    await db.councillor.delete({
+      where: { id },
+    });
+  } catch {
+    return { success: false, message: "Failed to delete councillor" };
+  }
+  revalidatePath("/portal/councillors");
+  return { success: true, message: "Deleted" };
 }
 
 export async function AddWardAction(data: z.infer<typeof WardSchema>) {
