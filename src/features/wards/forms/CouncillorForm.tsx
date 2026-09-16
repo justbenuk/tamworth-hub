@@ -20,18 +20,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Prisma } from "@prisma/client";
+import type { Prisma, Ward } from "@prisma/client";
 import { EditIcon, PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import {
-  AddCouncillorAction,
-  EditCouncillorAction,
-  FetchAllWardsAction,
-} from "../WardActions";
+import { AddCouncillorAction, EditCouncillorAction } from "../WardActions";
 import { CouncillorSchema } from "../WordSchemas";
 
 type CouncillorWithImage = Prisma.CouncillorGetPayload<{
@@ -40,16 +36,16 @@ type CouncillorWithImage = Prisma.CouncillorGetPayload<{
   };
 }>;
 
-type WardOption = Awaited<ReturnType<typeof FetchAllWardsAction>>[number];
-
 type CouncillorProps =
   | {
       mode: "add";
       councillor?: never;
+      wards: Ward[];
     }
   | {
       mode: "edit";
       councillor: CouncillorWithImage;
+      wards: Ward[];
     };
 
 const selectClassName =
@@ -60,12 +56,12 @@ export default function CouncillorForm(props: CouncillorProps) {
   const isEditing = props.mode === "edit";
   const councillor = isEditing ? props.councillor : null;
   const [open, setOpen] = useState(false);
-  const [wards, setWards] = useState<WardOption[]>([]);
-  const [wardsError, setWardsError] = useState<string | null>(null);
+  const [wards, setWards] = useState(props.wards);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(
     councillor?.image.url ?? null,
   );
 
+  console.log(props.wards);
   const defaultValues: z.input<typeof CouncillorSchema> = {
     name: councillor?.name ?? "",
     email: councillor?.email ?? "",
@@ -88,30 +84,6 @@ export default function CouncillorForm(props: CouncillorProps) {
     resolver: zodResolver(CouncillorSchema),
     defaultValues,
   });
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadWards() {
-      try {
-        const availableWards = await FetchAllWardsAction();
-        if (!cancelled) {
-          setWards(availableWards);
-          setWardsError(null);
-        }
-      } catch {
-        if (!cancelled) {
-          setWardsError("Unable to load wards.");
-        }
-      }
-    }
-
-    void loadWards();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   async function handleSubmit(values: z.output<typeof CouncillorSchema>) {
     try {
@@ -154,7 +126,7 @@ export default function CouncillorForm(props: CouncillorProps) {
               ? `Edit ${props.councillor.name}`
               : "Add councillor"
           }
-          variant={isEditing ? "ghost" : null}
+          variant={isEditing ? "ghost" : "default"}
         >
           {isEditing ? <EditIcon className="text-yellow-500" /> : <PlusIcon />}
         </Button>
@@ -261,21 +233,14 @@ export default function CouncillorForm(props: CouncillorProps) {
                       {...field}
                       id="councillor-ward"
                       className={selectClassName}
-                      disabled={wards.length === 0}
-                      aria-invalid={fieldState.invalid || Boolean(wardsError)}
+                      aria-invalid={fieldState.invalid}
                     >
-                      <option value="">
-                        {wards.length === 0
-                          ? "Loading wards…"
-                          : "Select a ward"}
-                      </option>
                       {wards.map((ward) => (
                         <option key={ward.id} value={ward.id}>
                           {ward.name}
                         </option>
                       ))}
                     </select>
-                    {wardsError && <FieldError>{wardsError}</FieldError>}
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}

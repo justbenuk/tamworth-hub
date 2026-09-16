@@ -5,7 +5,7 @@ import {
   SidebarMenu,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
-import { UsersIcon } from "lucide-react";
+import { ListIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function OtherMenu() {
@@ -15,7 +15,15 @@ export default function OtherMenu() {
         <SidebarGroupLabel>Site</SidebarGroupLabel>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
-            <Link href={"portal/users"}>
+            <Link href={"/portal/categories"}>
+              <ListIcon />
+              <span>Categories</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>{" "}
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <Link href={"/portal/users"}>
               <UsersIcon />
               <span>Users</span>
             </Link>

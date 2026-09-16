@@ -1,5 +1,5 @@
 import PageContainer from "@/components/PageContainer";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import WardDialog from "@/features/wards/components/WardDialog";
 import AllWardsTable from "@/features/wards/tables/AllWardsTable";
 import { FetchAllWardsAction } from "@/features/wards/WardActions";
@@ -12,9 +12,14 @@ export default async function PortalWardsPage() {
   return (
     <PageContainer size="large" className="py-10">
       <div className="grid gap-6">
-        <div className="flex flex-row items-center justify-end">
-          <WardDialog />
-        </div>
+        <Card className="flex flex-row items-center justify-between">
+          <CardHeader>
+            <CardTitle>Wards</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <WardDialog />
+          </CardContent>
+        </Card>
         <Card>
           <CardContent>
             <AllWardsTable wards={wards} />

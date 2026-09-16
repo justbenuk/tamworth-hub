@@ -7,6 +7,27 @@ datasource db {
 }
 
 //--------------------------------------------
+//Categories
+//--------------------------------------------
+
+enum CategoryType {
+  NEWS
+  CRIME
+  CHARITY
+  JOBS
+  EVENTS
+  COMPANIES
+  UNCATEGORISED
+}
+
+model Category {
+  id   String       @id @default(cuid())
+  name String
+  slug String
+  type CategoryType @default(UNCATEGORISED)
+}
+
+//--------------------------------------------
 //User - Account
 //--------------------------------------------
 

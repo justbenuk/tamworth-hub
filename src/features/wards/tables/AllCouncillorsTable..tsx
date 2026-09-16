@@ -1,6 +1,6 @@
 "use client";
 import TableContainer from "@/components/tables/TableContainer";
-import { Prisma } from "@prisma/client";
+import { Prisma, Ward } from "@prisma/client";
 import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import Image from "next/image";
 import EditCouncillorForm from "../forms/editCouncillorForm";
@@ -15,8 +15,10 @@ type CouncillorProps = Prisma.CouncillorGetPayload<{
 
 export default function AllCouncillorsTable({
   councillors,
+  wards,
 }: {
   councillors: CouncillorProps[];
+  wards: Ward[];
 }) {
   const coldefs: ColDef<CouncillorProps>[] = [
     {
@@ -29,7 +31,7 @@ export default function AllCouncillorsTable({
             alt={row.data?.name as string}
             width={30}
             height={30}
-            className="rounded-full"
+            className="rounded-full aspect-square w-auto h-auto"
           />
         </div>
       ),
@@ -54,7 +56,7 @@ export default function AllCouncillorsTable({
       headerName: "Actions",
       cellRenderer: (row: ICellRendererParams) => (
         <div className="flex items-center h-full">
-          <EditCouncillorForm councillor={row.data} />
+          <EditCouncillorForm councillor={row.data} wards={wards} />
           <DeleteCouncillorButton id={row.data.id} />
         </div>
       ),

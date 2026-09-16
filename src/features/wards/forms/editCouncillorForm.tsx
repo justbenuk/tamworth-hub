@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Ward } from "@prisma/client";
 import CouncillorForm from "./CouncillorForm";
 
 type CouncillorWImage = Prisma.CouncillorGetPayload<{
@@ -8,8 +8,10 @@ type CouncillorWImage = Prisma.CouncillorGetPayload<{
 }>;
 export default function EditCouncillorForm({
   councillor,
+  wards,
 }: {
   councillor: CouncillorWImage;
+  wards: Ward[];
 }) {
-  return <CouncillorForm mode="edit" councillor={councillor} />;
+  return <CouncillorForm mode="edit" councillor={councillor} wards={wards} />;
 }
