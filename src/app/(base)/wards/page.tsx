@@ -9,6 +9,8 @@ export const metadata: Metadata = {
 };
 const dynamic = "force-dynamic";
 
+const dynamic = "force-dynamic";
+
 export default async function WardsPage() {
   const wards = await FetchAllWardsAction();
   return <WardListMapContainer wards={wards} />;
