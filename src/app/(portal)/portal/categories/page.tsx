@@ -10,6 +10,8 @@ import { FetchAllCategories } from "@/features/categories/CategoryActions";
 import { AddCategoryForm } from "@/features/categories/forms/AddCategoryForm";
 import AllCategoriesTable from "@/features/categories/tables/AllCategoriesTable";
 
+export const dynamic = "force-dynamic";
+
 export default async function PortalCategoriesPage() {
   const categories = await FetchAllCategories();
   return (

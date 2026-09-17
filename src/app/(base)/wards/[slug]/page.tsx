@@ -21,6 +21,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { FetchWardBySlug } from "@/features/wards/WardActions";
 
+export const dynamic = "force-dynamic";
+
 type WardPageProps = {
   params: Promise<{ slug: string }>;
 };

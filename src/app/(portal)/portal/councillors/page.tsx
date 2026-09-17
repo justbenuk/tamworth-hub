@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   title: "Councillors",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardCouncillorsPage() {
   const councillors = await FetchAllCouncillorsAction();
   const wards = await FetchAllWardsAction();

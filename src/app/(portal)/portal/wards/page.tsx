@@ -7,6 +7,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Wards",
 };
+
+export const dynamic = "force-dynamic";
+
 export default async function PortalWardsPage() {
   const wards = await FetchAllWardsAction();
   return (
