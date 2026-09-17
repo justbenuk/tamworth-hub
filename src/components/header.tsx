@@ -12,7 +12,7 @@ export default function Header() {
         <div className="justify-self-center">
           <MenuList />
         </div>
-        <div className="justify-self-end">auth</div>
+        <div className="justify-self-end">_</div>
       </header>
     </PageContainer>
   );
