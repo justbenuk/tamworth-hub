@@ -2,19 +2,23 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
   SidebarHeader,
-  SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { UserMenu } from "@/features/profile/components/UserMenu";
 import { auth } from "@/lib/auth";
-import { ChurchIcon, LayoutDashboardIcon, UserIcon } from "lucide-react";
+import { ChurchIcon, LayoutDashboardIcon } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import React from "react";
+import MessagesMenu from "./menus/MessagesMenu";
+import OtherMenu from "./menus/OtherMenu";
+import WardsMenu from "./menus/WardsMenu";
+import PostsMenu from "./menus/PostsMenu";
 
-export default async function DashboardSidebar({
+export default async function PortalSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const session = await auth.api.getSession({
@@ -25,30 +29,30 @@ export default async function DashboardSidebar({
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <Link href={"/"} className="flex flex-row items-center gap-2">
-          <ChurchIcon className="size-4" />
-          Back to site
-        </Link>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <Link href={"/"}>
+              <ChurchIcon />
+              <span>Back to site</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
+        <SidebarGroup>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href={"/dashboard"}>
+              <Link href={"/portal"}>
                 <LayoutDashboardIcon />
-                <span>Dashboard</span>
+                <span>Portal</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href={"/dashboard/profile"}>
-                <UserIcon />
-                <span>Profile</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        </SidebarGroup>
+        <PostsMenu />
+        <WardsMenu />
+        <MessagesMenu />
+        <OtherMenu />
       </SidebarContent>
       <SidebarFooter>
         <UserMenu user={session.user} />

@@ -31,7 +31,7 @@ export default function LoginForm() {
 
     if (response.success) {
       toast.success(response.message);
-      router.replace("/dashboard");
+      router.replace("/profile");
       router.refresh();
     } else {
       toast.error(response.message);
