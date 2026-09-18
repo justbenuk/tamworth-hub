@@ -25,7 +25,7 @@ export default async function PortalWardsPage() {
         </Card>
         <Card>
           <CardContent>
-            <AllWardsTable wards={wards} />
+            <AllWardsTable wards={wards.data} />
           </CardContent>
         </Card>
       </div>

@@ -25,12 +25,12 @@ export default async function DashboardCouncillorsPage() {
             <CardTitle>Councillors</CardTitle>
           </CardHeader>
           <CardContent>
-            <AddCouncillorForm wards={wards} />
+            <AddCouncillorForm wards={wards.data} />
           </CardContent>
         </Card>
         <Card>
           <CardContent>
-            <AllCouncillorsTable councillors={councillors} wards={wards} />
+            <AllCouncillorsTable councillors={councillors} wards={wards.data} />
           </CardContent>
         </Card>
       </div>
