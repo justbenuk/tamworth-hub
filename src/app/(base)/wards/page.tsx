@@ -7,8 +7,6 @@ export const metadata: Metadata = {
     "Explore Tamworth wards and find local news, crime information, jobs and councillors.",
 };
 
-export const dynamic = "force-dynamic";
-
-export default async function WardsPage() {
+export default function WardsPage() {
   return <WardList />;
 }
