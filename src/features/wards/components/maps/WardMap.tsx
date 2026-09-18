@@ -102,7 +102,7 @@ export default function WardMap(props: Props) {
     <Map
       center={[52.6339, -1.695]}
       zoom={12}
-      className="z-0 h-[80dvh] rounded-2xl my-auto"
+      className="z-0 h-[60dvh] rounded-2xl my-auto"
       attributionControl
       scrollWheelZoom={false}
     >

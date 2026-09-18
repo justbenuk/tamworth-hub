@@ -6,12 +6,19 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { FetchAllWardsAction } from "../../WardActions";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const WardMap = dynamic(() => import("./WardMap"), {
   ssr: false,
   loading: () => (
     <div
-      className="flex h-[80dvh] my-auto items-center justify-center bg-muted"
+      className="flex h-[60dvh] my-auto items-center justify-center bg-muted"
       role="status"
     >
       Loading ward map…
@@ -67,12 +74,18 @@ export default function WardListMapContainer() {
   if (error) return <p>error</p>;
 
   return (
-    <PageContainer size="large">
-      <WardMap
-        wards={wards}
-        selectedId={selectedId}
-        onSelectAction={selectWard}
-      />
-    </PageContainer>
+    <Card>
+      <CardHeader>
+        <CardTitle>Ward Map</CardTitle>
+        <CardDescription>Click on the map to select a ward</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <WardMap
+          wards={wards}
+          selectedId={selectedId}
+          onSelectAction={selectWard}
+        />
+      </CardContent>
+    </Card>
   );
 }
