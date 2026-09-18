@@ -9,15 +9,21 @@ import { revalidatePath } from "next/cache";
 import slugify from "slugify";
 
 export async function FetchAllWardsAction() {
-  return db.ward.findMany({
-    include: {
-      councillors: {
-        include: {
-          image: true,
+  try {
+    const data = await db.ward.findMany({
+      include: {
+        councillors: {
+          include: {
+            image: true,
+          },
         },
       },
-    },
-  });
+    });
+
+    return { success: true, data };
+  } catch {
+    throw new Error("Failed to fetch wards");
+  }
 }
 
 export async function FetchWardBySlug(slug: string) {

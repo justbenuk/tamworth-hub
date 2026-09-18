@@ -1,10 +1,11 @@
 "use client";
 
 import PageContainer from "@/components/PageContainer";
-import type { Ward } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { FetchAllWardsAction } from "../../WardActions";
 
 const WardMap = dynamic(() => import("./WardMap"), {
   ssr: false,
@@ -18,10 +19,38 @@ const WardMap = dynamic(() => import("./WardMap"), {
   ),
 });
 
-export default function WardListMapContainer({ wards }: { wards: Ward[] }) {
+type WardsWCouncillors = Prisma.WardGetPayload<{
+  include: {
+    councillors: {
+      include: {
+        image: true;
+      };
+    };
+  };
+}>;
+
+export default function WardListMapContainer() {
   const router = useRouter();
   const [selectedId, setSelectedId] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [wards, setWards] = useState<WardsWCouncillors[]>([]);
+  const [error, setError] = useState<string | null>();
   const [isNavigating, startNavigation] = useTransition();
+
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      const response = await FetchAllWardsAction();
+
+      if (response.success) {
+        setWards(response.data);
+      } else {
+        setError("Failed to fetch posts");
+      }
+      setLoading(false);
+    }
+    loadData();
+  }, []);
 
   function selectWard(id: string) {
     setSelectedId(id);
@@ -33,6 +62,9 @@ export default function WardListMapContainer({ wards }: { wards: Ward[] }) {
       router.push(`/wards/${ward.slug}`);
     });
   }
+
+  if (loading) return <p>loading</p>;
+  if (error) return <p>error</p>;
 
   return (
     <PageContainer size="large">
