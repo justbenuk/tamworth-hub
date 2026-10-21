@@ -41,7 +41,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
   }
   return (
     <form onSubmit={form.handleSubmit(handleForm)} className="grid gap-6">
-      <div className="flex flex-col md:flex-row items-center gap-10">
+      <div className="flex flex-col items-center gap-3">
         <Controller
           name="newPassword"
           control={form.control}

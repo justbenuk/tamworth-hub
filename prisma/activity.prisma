@@ -1,0 +1,22 @@
+model ActivityLog {
+  id String @id @default(cuid())
+
+  actorId   String?
+  actorType String
+
+  action     String
+  entityType String
+  entityId   String
+
+  description String?
+  metadata    Json?
+
+  visibility String @default("PRIVATE")
+
+  createdAt DateTime @default(now())
+
+  @@index([actorId, createdAt])
+  @@index([entityType, entityId, createdAt])
+  @@index([action, createdAt])
+  @@index([createdAt])
+}

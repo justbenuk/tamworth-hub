@@ -10,6 +10,7 @@ import {
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { db } from "@/lib/db";
 
 export async function RegisterUserAction(
   values: z.infer<typeof RegisterSchema>,
@@ -23,6 +24,15 @@ export async function RegisterUserAction(
         image: "/assets/profile.png",
       },
       headers: await headers(),
+    });
+    await db.activityLog.create({
+      data: {
+        actorId: "user",
+        actorType: "Site",
+        action: "user.registered",
+        entityType: "registration",
+        entityId: "user",
+      },
     });
   } catch (error) {
     return {

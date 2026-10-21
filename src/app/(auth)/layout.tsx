@@ -1,3 +1,6 @@
+import SmallFooter from "@/components/footers/SmallFooter";
+import MainHeader from "@/components/headers/MainHeader";
+import PageContainer from "@/components/PageContainer";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -11,10 +14,12 @@ export default async function AuthLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (session?.user) redirect("/profile");
+  if (session?.user) redirect("/dashboard/profile");
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">{children}</div>
+    <div className="min-h-screen flex flex-col justify-between">
+      <MainHeader />
+      <PageContainer size="small">{children}</PageContainer>
+      <SmallFooter />
     </div>
   );
 }

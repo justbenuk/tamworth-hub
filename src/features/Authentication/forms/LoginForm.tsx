@@ -5,6 +5,7 @@ import {
   FieldLabel,
   FieldContent,
   FieldError,
+  FieldDescription,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Controller, useForm } from "react-hook-form";
@@ -15,6 +16,7 @@ import { LoginUserAction } from "../AutenticationActions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -34,7 +36,7 @@ export default function LoginForm() {
 
     if (response.success) {
       toast.success(response.message);
-      router.push("/profile");
+      router.push("/dashboard");
       router.refresh();
     } else {
       toast.error(response.message);
@@ -75,6 +77,12 @@ export default function LoginForm() {
           )}
         />
         <Button variant={"default"}>Register</Button>
+        <FieldGroup className="flex flex-row justify-center">
+          <FieldDescription>
+            Forgot Password?{" "}
+            <Link href={"/forgot-password"}>Reset Password</Link>
+          </FieldDescription>
+        </FieldGroup>
       </FieldGroup>
     </form>
   );

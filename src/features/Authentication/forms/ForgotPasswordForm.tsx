@@ -36,10 +36,7 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <form
-      onSubmit={form.handleSubmit(handleForm)}
-      className="max-w-sm mx-auto space-y-4"
-    >
+    <form onSubmit={form.handleSubmit(handleForm)} className="grid gap-2">
       <Controller
         name="email"
         control={form.control}
