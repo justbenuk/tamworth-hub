@@ -27,7 +27,7 @@ export default async function Profileayout({
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <SidebarInset>
+      <SidebarInset className="bg-gray-100">
         <DashboardHeader />
         <PageContainer size="large" className="py-6">
           {children}

@@ -18,7 +18,7 @@ export async function RegisterUserAction(
   const validated = RegisterSchema.parse(values);
 
   try {
-    await auth.api.signUpEmail({
+    const response = await auth.api.signUpEmail({
       body: {
         ...validated,
         image: "/assets/profile.png",
@@ -27,11 +27,11 @@ export async function RegisterUserAction(
     });
     await db.activityLog.create({
       data: {
-        actorId: "user",
-        actorType: "Site",
+        actorId: response.user.id,
+        actorType: "User",
         action: "user.registered",
         entityType: "registration",
-        entityId: "user",
+        entityId: response.user.id,
       },
     });
   } catch (error) {

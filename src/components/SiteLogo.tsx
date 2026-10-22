@@ -1,33 +1,23 @@
-import { cn } from "cn";
-import { CastleIcon } from "lucide-react";
 import Link from "next/link";
 
-const iconSizes = {
-  small: "size-4",
-  medium: "size-8",
-  large: "size-12",
-};
-
-const textSizes = {
-  small: "text-md",
-  medium: "text-2xl",
-  large: "text-4xl",
-};
-
-type LogoProps = {
-  size?: "small" | "medium" | "large";
-};
-
-export default function SiteLogo({ size = "medium" }: LogoProps) {
+export default function SiteLogo() {
   return (
     <Link
       href={"/"}
-      className="flex flex-row items-center justify-center gap-2 text-primary font-semibold"
+      className="flex flex-col items-center justify-center gap-2"
     >
-      <CastleIcon className={cn("", iconSizes[size])} />
-      <span className={cn("hidden md:flex", textSizes[size])}>
-        Tamworth Hub
-      </span>
+      <h1>
+        TAMWORTH <span className="text-primary">HUB</span>
+      </h1>
+      <div className="flex flex-row items-center justify-evenly w-full">
+        <span>NEWS</span>
+        <span>|</span>
+        <span>PEOPLE</span>
+        <span>|</span>
+        <span>PLACES</span>
+        <span>|</span>
+        <span>COMMUNITY</span>
+      </div>
     </Link>
   );
 }

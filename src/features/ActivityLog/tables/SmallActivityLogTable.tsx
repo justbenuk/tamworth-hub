@@ -31,7 +31,7 @@ export default function SmallActivityLogTable({
       </TableHeader>
       <TableBody>
         {logs.map((log) => (
-          <TableRow key={log.actorType}>
+          <TableRow key={log.id}>
             <TableCell>{log.actorType}</TableCell>
             <TableCell>{log.entityType}</TableCell>
             <TableCell>{log.action}</TableCell>

@@ -22,12 +22,12 @@ export default async function AdminLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (!session?.user || session?.user.role === "admin") redirect("/login");
+  if (!session?.user || session?.user.role !== "admin") redirect("/login");
 
   return (
     <SidebarProvider>
       <AdminSidebar />
-      <SidebarInset>
+      <SidebarInset className="bg-gray-100">
         <AdminHeader />
         <PageContainer size="large" className="py-6">
           {children}

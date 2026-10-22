@@ -1,11 +1,28 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Barlow_Condensed, Inter, Caveat } from "next/font/google";
 
-const roboto = Roboto({ subsets: ["latin"], variable: "--font-sans" });
+const barlow = Barlow_Condensed({
+  subsets: ["latin"],
+  variable: "--font-barlow",
+  weight: ["600", "700", "800", "900"],
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
+  weight: ["600", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -18,8 +35,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={cn("h-full", "antialiased", roboto.variable)}>
-      <body className="min-h-full flex flex-col">
+    <html lang="en">
+      <body
+        className={`${barlow.variable} ${inter.variable} ${caveat.variable} antialiased`}
+      >
         <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
       </body>

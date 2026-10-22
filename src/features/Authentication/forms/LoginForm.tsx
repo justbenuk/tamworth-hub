@@ -76,7 +76,7 @@ export default function LoginForm() {
             </Field>
           )}
         />
-        <Button variant={"default"}>Register</Button>
+        <Button variant={"default"}>Login</Button>
         <FieldGroup className="flex flex-row justify-center">
           <FieldDescription>
             Forgot Password?{" "}
