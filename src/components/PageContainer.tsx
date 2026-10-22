@@ -8,7 +8,7 @@ type PageControllerProps = {
 };
 
 const sizes = {
-  small: "max-w-3xl",
+  small: "max-w-lg w-full",
   medium: "max-w-7xl",
   large: "container",
 };
@@ -19,8 +19,6 @@ export default function PageContainer({
   size = "large",
 }: PageControllerProps) {
   return (
-    <div className={cn("mx-auto px-6 2xl:px-0", className, sizes[size])}>
-      {children}
-    </div>
+    <div className={cn("mx-auto px-6", className, sizes[size])}>{children}</div>
   );
 }

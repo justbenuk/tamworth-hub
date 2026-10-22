@@ -1,0 +1,27 @@
+enum ContactType {
+  LISTING
+  GENERAL
+  SUGGESTION
+  BUG
+  ACCOUNT
+}
+
+enum ContactStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model ContactSubmission {
+  id        String        @id @default(cuid())
+  type      ContactType   @default(GENERAL)
+  name      String
+  email     String
+  subject   String?
+  message   String        @db.Text
+  pageUrl   String?
+  status    ContactStatus @default(NEW)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
