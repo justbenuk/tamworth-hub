@@ -8,14 +8,14 @@ import {
 import SmallActivityLogCard from "@/features/ActivityLog/components/SmallActivityLogCard";
 import { FetchAdminTotalsAction } from "@/features/admin/AdminActions";
 import {
-  FaceSlightlySmilingPlusIcon,
   FactoryIcon,
+  MessageCircleIcon,
   PartyPopperIcon,
   UsersIcon,
 } from "lucide-react";
 
 export default async function DashboardPage() {
-  const { totalUsers } = await FetchAdminTotalsAction();
+  const { totalUsers, totalNewMessages } = await FetchAdminTotalsAction();
   return (
     <div className="grid gap-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -41,12 +41,12 @@ export default async function DashboardPage() {
         </Card>
         <Card className="flex flex-row items-center justify-between border border-orange-500/30">
           <CardHeader className="flex-1 leading-3">
-            <CardTitle>Charities</CardTitle>
-            <CardDescription>Total Charities Claimed</CardDescription>
+            <CardTitle>New Messages</CardTitle>
+            <CardDescription>Total New Messages</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col justify-center items-center gap-2">
-            <FaceSlightlySmilingPlusIcon className="text-orange-500/30" />
-            <span>{totalUsers}</span>
+            <MessageCircleIcon className="text-orange-500/30" />
+            <span>{totalNewMessages}</span>
           </CardContent>
         </Card>
         <Card className="flex flex-row items-center justify-between border border-teal-500/30">

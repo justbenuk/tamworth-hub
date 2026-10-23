@@ -1,24 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Mail,
-  Lightbulb,
-  TriangleAlert,
-  Store,
-  ArrowRight,
-} from "lucide-react";
-
+import { Mail, Lightbulb, TriangleAlert, Store, Lock } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MainContactForm from "../forms/MainContactForm";
+import { ContactType } from "@prisma/client/index-browser";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-
-const contactTypes = [
+const contactForms = [
   {
-    value: "general",
+    value: ContactType.GENERAL,
     label: "General enquiry",
     icon: Mail,
     eyebrow: "GENERAL ENQUIRY",
@@ -27,7 +17,7 @@ const contactTypes = [
       "If you have a question, need more information or just want to get in touch, fill in the form and we'll get back to you as soon as we can.",
   },
   {
-    value: "suggestion",
+    value: ContactType.SUGGESTION,
     label: "Suggest an idea",
     icon: Lightbulb,
     eyebrow: "YOUR IDEAS",
@@ -36,7 +26,7 @@ const contactTypes = [
       "Have an idea for improving Tamworth Hub? We'd love to hear your suggestions.",
   },
   {
-    value: "bug",
+    value: ContactType.BUG,
     label: "Report a problem",
     icon: TriangleAlert,
     eyebrow: "REPORT A PROBLEM",
@@ -45,7 +35,7 @@ const contactTypes = [
       "Spotted something that isn't working correctly? Let us know so we can investigate.",
   },
   {
-    value: "listing",
+    value: ContactType.LISTING,
     label: "Listing support",
     icon: Store,
     eyebrow: "LISTING SUPPORT",
@@ -53,91 +43,23 @@ const contactTypes = [
     description:
       "Get help with an existing business, event or job listing on Tamworth Hub.",
   },
+  {
+    value: ContactType.ACCOUNT,
+    label: "Account enquiry",
+    icon: Lock,
+    eyebrow: "ACCOUNT ENQUIRY",
+    title: "Account Problem",
+    description:
+      "If you have a question, need more information or have an issue with your account.",
+  },
 ] as const;
 
-type ContactType = (typeof contactTypes)[number]["value"];
-
 function ContactForm({ type }: { type: ContactType }) {
-  return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        // Connect to your server action here.
-      }}
-      className="space-y-5"
-    >
-      <input type="hidden" name="type" value={type} />
-
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor={`${type}-name`}>
-            Your name <span className="text-primary">*</span>
-          </Label>
-          <Input
-            id={`${type}-name`}
-            name="name"
-            placeholder="Enter your name"
-            required
-            className="h-11 rounded-sm"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${type}-email`}>
-            Email address <span className="text-primary">*</span>
-          </Label>
-          <Input
-            id={`${type}-email`}
-            name="email"
-            type="email"
-            placeholder="Enter your email address"
-            required
-            className="h-11 rounded-sm"
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor={`${type}-subject`}>
-          Subject <span className="text-primary">*</span>
-        </Label>
-        <Input
-          id={`${type}-subject`}
-          name="subject"
-          placeholder="What is your message about?"
-          required
-          className="h-11 rounded-sm"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor={`${type}-message`}>
-          Message <span className="text-primary">*</span>
-        </Label>
-        <Textarea
-          id={`${type}-message`}
-          name="message"
-          placeholder="Type your message here..."
-          rows={6}
-          required
-          className="min-h-36 resize-y rounded-sm"
-        />
-      </div>
-
-      <Button
-        type="submit"
-        size="lg"
-        className="h-12 rounded-sm px-7 font-semibold"
-      >
-        Send message
-        <ArrowRight className="ml-2 size-4" />
-      </Button>
-    </form>
-  );
+  return <MainContactForm mode={type} />;
 }
 
 export default function ContactTabs() {
-  const [activeTab, setActiveTab] = useState<ContactType>("general");
+  const [activeTab, setActiveTab] = useState<ContactType>("GENERAL");
 
   return (
     <Tabs
@@ -152,10 +74,10 @@ export default function ContactTabs() {
     grid! h-auto! w-full! grid-cols-2!
     gap-0! rounded-none! p-0!
     border border-border bg-muted/40
-    lg:grid-cols-4!
+    lg:grid-cols-5!
   "
       >
-        {contactTypes.map((item) => {
+        {contactForms.map((item) => {
           const Icon = item.icon;
 
           return (
@@ -193,7 +115,7 @@ export default function ContactTabs() {
       </TabsList>
 
       {/* Form panels */}
-      {contactTypes.map((item) => (
+      {contactForms.map((item) => (
         <TabsContent
           key={item.value}
           value={item.value}
