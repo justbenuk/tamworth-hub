@@ -10,3 +10,8 @@ export const ContactSchema = z.object({
   pageUrl: z.string().optional(),
   status: z.enum(ContactStatus),
 });
+
+export const ContactFormStatusSchema = z.object({
+  id: z.string(),
+  status: z.enum(ContactStatus),
+});
