@@ -3,14 +3,14 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { CastleIcon, LayoutDashboardIcon, LineChartIcon } from "lucide-react";
+import { CastleIcon, LayoutDashboardIcon } from "lucide-react";
 import Link from "next/link";
+import AdminSiteMenuItems from "./AdminSiteMenuItems";
 
 export default function AdminSidebar() {
   return (
@@ -39,17 +39,7 @@ export default function AdminSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>Site</SidebarGroupLabel>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href={"/admin/activity-log"}>
-                  <LineChartIcon />
-                  <span>Activity Log</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarGroup>
+          <AdminSiteMenuItems />
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>g</SidebarFooter>

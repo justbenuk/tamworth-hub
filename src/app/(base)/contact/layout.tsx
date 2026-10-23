@@ -21,6 +21,7 @@ export default function ContactLayout({ children }: { children: ReactNode }) {
               alt="castle"
               width={600}
               height={600}
+              className="w-full"
             />
             <div className="py-4 px-6 grid space-y-2">
               <h5 className="text-primary">Our Community</h5>

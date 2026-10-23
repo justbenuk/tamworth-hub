@@ -2,7 +2,14 @@
 import { db } from "@/lib/db";
 
 export async function FetchAdminTotalsAction() {
-  const [totalUsers] = await db.$transaction([db.user.count()]);
+  const [totalUsers, totalMessages] = await db.$transaction([
+    db.user.count(),
+    db.contactSubmission.findMany(),
+  ]);
 
-  return { totalUsers };
+  const totalNewMessages = totalMessages.filter(
+    (message) => message.status === "NEW",
+  ).length;
+
+  return { totalUsers, totalNewMessages };
 }

@@ -8,8 +8,8 @@ import {
 export default function ContactCardList() {
   return (
     <div className="border-t py-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        <div className="boder-3 border-r">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="boder-3 md:border-r pr-4">
           <div className="flex flex-row items-center gap-6">
             <NewspaperIcon className="size-10" />
             <div className="flex-1">
@@ -21,8 +21,8 @@ export default function ContactCardList() {
             </div>
           </div>
         </div>
-        <div className="boder-3 border-r">
-          <div className="flex flex-row items-center gap-6 pl-6">
+        <div className="boder-3 lg:border-r pr-4">
+          <div className="flex flex-row items-center gap-6">
             <UsersIcon className="size-10" />
             <div className="flex-1">
               <h5>Community focused</h5>
@@ -33,8 +33,8 @@ export default function ContactCardList() {
             </div>
           </div>
         </div>
-        <div className="boder-3 border-r">
-          <div className="flex flex-row items-center gap-6 pl-6">
+        <div className="boder-3 md:border-r pr-4">
+          <div className="flex flex-row items-center gap-6">
             <MessageCircleIcon className="size-10" />
             <div className="flex-1">
               <h5>Your feedback matters</h5>
@@ -43,13 +43,15 @@ export default function ContactCardList() {
           </div>
         </div>
         <div>
-          <div className="flex flex-row items-center gap-6 pl-6">
-            <HeartIcon className="size-10" />
-            <div className="flex-1">
-              <h5>A stronger Tamworth</h5>
-              <p>
-                Together we can keep Tamworth informed, connected and thriving
-              </p>
+          <div className="pr-4">
+            <div className="flex flex-row items-center gap-6">
+              <HeartIcon className="size-10" />
+              <div className="flex-1">
+                <h5>A stronger Tamworth</h5>
+                <p>
+                  Together we can keep Tamworth informed, connected and thriving
+                </p>
+              </div>
             </div>
           </div>
         </div>
