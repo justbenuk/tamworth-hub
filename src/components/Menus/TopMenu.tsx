@@ -5,7 +5,7 @@ import AuthMenu from "./AuthMenu";
 export default function TopMenu() {
   const date = new Date();
   return (
-    <div className="bg-neutral-800 text-primary-foreground">
+    <div className="bg-neutral-800 text-primary-foreground py-2">
       <PageContainer>
         <div className="flex flex-row justify-between items-center">
           <div className="text-xs font-semibold">

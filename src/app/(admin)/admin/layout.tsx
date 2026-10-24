@@ -22,7 +22,7 @@ export default async function AdminLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (!session?.user || session?.user.role !== "admin") redirect("/login");
+  if (!session?.user || session?.user.role !== "admin") redirect("/access");
 
   return (
     <SidebarProvider>
