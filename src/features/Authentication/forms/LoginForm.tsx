@@ -44,7 +44,13 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(handleForm)}>
+    <form onSubmit={form.handleSubmit(handleForm)} className="grid gap-6">
+      <div>
+        <h2>Already Registerd?</h2>
+        <p className="text-lead">
+          Access your account to manage your Profile, Business or Charity
+        </p>
+      </div>
       <FieldGroup>
         <Controller
           name="email"

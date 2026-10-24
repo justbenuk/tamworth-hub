@@ -10,6 +10,7 @@ import {
 import MainHeader from "@/components/headers/MainHeader";
 import Footer from "@/components/footers/Footer";
 import SiteMenu from "@/components/Menus/SiteMenu";
+import TopMenu from "@/components/Menus/TopMenu";
 
 const destinations = [
   { label: "Latest news", href: "/news", icon: Newspaper },
@@ -22,6 +23,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
+        <TopMenu />
         <MainHeader />
         <SiteMenu />
       </div>

@@ -26,7 +26,7 @@ const getFreshSession = cache(async () =>
 export async function requireUser() {
   const session = await getFreshSession();
 
-  if (!session?.user) redirect("/login");
+  if (!session?.user) redirect("/access");
 
   return session.user;
 }

@@ -44,8 +44,15 @@ export default function RegisterForm() {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(handleForm)}>
-      <FieldGroup>
+    <form onSubmit={form.handleSubmit(handleForm)} className="grid gap-6">
+      <div>
+        <h2>New to Tamworth Hub?</h2>
+        <p className="text-lead">
+          Register for an account, manage Bisuness Listings, Jobs, Charities and
+          events all in one place
+        </p>
+      </div>
+      <FieldGroup className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <Controller
           name="name"
           control={form.control}
@@ -76,6 +83,8 @@ export default function RegisterForm() {
             </Field>
           )}
         />
+      </FieldGroup>
+      <FieldGroup className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <Controller
           name="password"
           control={form.control}
@@ -106,8 +115,8 @@ export default function RegisterForm() {
             </Field>
           )}
         />
-        <Button variant={"default"}>Register</Button>
       </FieldGroup>
+      <Button variant={"default"}>Register</Button>
     </form>
   );
 }
