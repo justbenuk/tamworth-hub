@@ -23,6 +23,9 @@ export default function CategoriesBar({
   const [measuredCount, setVisibleCount] = useState<number | null>(null);
   const visibleCount = measuredCount ?? 0;
   const [isOpen, setIsOpen] = useState(false);
+  const active = categories.filter(
+    (cat) => cat.parentId === null && cat.isActive === true,
+  );
 
   useEffect(() => {
     const container = containerRef.current;
@@ -68,9 +71,9 @@ export default function CategoriesBar({
     return () => observer.disconnect();
   }, [categories]);
 
-  const hiddenCategories = categories.slice(visibleCount);
-  const isActive = (category: BusinessCategory) =>
-    pathname === `/businesses/categories/${category.slug}`;
+  const hiddenCategories = active.slice(visibleCount);
+  const isActive = (active: BusinessCategory) =>
+    pathname === `/businesses/categories/${active.slug}`;
   const moreIsActive =
     measuredCount !== null && hiddenCategories.some(isActive);
 
@@ -84,7 +87,7 @@ export default function CategoriesBar({
         className="pointer-events-none invisible absolute inset-x-0 top-0 h-0 overflow-hidden"
       >
         <div ref={measureRef} className="flex w-max">
-          {categories.map((category) => (
+          {active.map((category) => (
             <span
               key={category.id}
               className={`${itemClass} border-transparent`}
@@ -111,7 +114,7 @@ export default function CategoriesBar({
             .join(" "),
         }}
       >
-        {categories.slice(0, visibleCount).map((category) => (
+        {active.slice(0, visibleCount).map((category) => (
           <Link
             key={category.id}
             href={`/businesses/categories/${category.slug}`}

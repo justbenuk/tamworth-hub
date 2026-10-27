@@ -1,6 +1,7 @@
 import EmptyCard from "@/components/EmptyCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FetchAllCategoriesAction } from "@/features/Business/BusinessActions";
+import AddCatogeryForm from "@/features/Business/forms/AddCatogeryForm";
 import AllCategoriesTable from "@/features/Business/tables/AllCategoriesTable";
 
 export default async function BusinessCategotriesPage() {
@@ -18,8 +19,11 @@ export default async function BusinessCategotriesPage() {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Business Categories</CardTitle>
+        <div>
+          <AddCatogeryForm />
+        </div>
       </CardHeader>
       <CardContent>
         <AllCategoriesTable categories={categories} />

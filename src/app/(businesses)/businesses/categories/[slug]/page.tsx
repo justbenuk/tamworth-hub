@@ -22,8 +22,6 @@ export default async function DetailCategoryPage({ params }: CategoryParams) {
 
   if (!category) return notFound();
 
-  console.log(category);
-
   return (
     <PageContainer className="py-10">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
@@ -37,9 +35,6 @@ export default async function DetailCategoryPage({ params }: CategoryParams) {
               <p className="text-lead">{category.description}</p>
             </div>
             <CategoriesBar categories={categories} />
-            <div>
-              <span>{category._count.children} business found</span>
-            </div>
           </div>
         </div>
         <aside className="grid gap-6">

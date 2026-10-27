@@ -2,25 +2,30 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Barlow_Condensed, Inter, Caveat } from "next/font/google";
+import localFont from "next/font/local";
 
-const barlow = Barlow_Condensed({
-  subsets: ["latin"],
+const barlow = localFont({
+  src: [
+    { path: "./fonts/BarlowCondensed-SemiBold.ttf", weight: "600" },
+    { path: "./fonts/BarlowCondensed-Bold.ttf", weight: "700" },
+    { path: "./fonts/BarlowCondensed-ExtraBold.ttf", weight: "800" },
+    { path: "./fonts/BarlowCondensed-Black.ttf", weight: "900" },
+  ],
   variable: "--font-barlow",
-  weight: ["600", "700", "800", "900"],
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "./fonts/Inter-Variable.ttf",
+  weight: "100 900",
   variable: "--font-inter",
   display: "swap",
 });
 
-const caveat = Caveat({
-  subsets: ["latin"],
+const caveat = localFont({
+  src: "./fonts/Caveat-Variable.ttf",
   variable: "--font-caveat",
-  weight: ["600", "700"],
+  weight: "600 700",
   display: "swap",
 });
 
