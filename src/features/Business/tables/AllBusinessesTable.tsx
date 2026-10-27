@@ -1,5 +1,6 @@
 "use client";
 import TableContainer from "@/components/Tables/TableContainer";
+import TableFilter, { TableFilterValue } from "@/components/Tables/TableFilter";
 import TableSearch from "@/components/Tables/TableSearch";
 import { Button } from "@/components/ui/button";
 import { Business } from "@prisma/client";
@@ -15,6 +16,12 @@ export default function AllBusinessesTable({
   businesses: Business[];
 }) {
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<
+    TableFilterValue<"isPublished" | "isFeatured">
+  >({
+    field: "",
+    value: "",
+  });
 
   const columns: ColDef<Business>[] = [
     {
@@ -65,12 +72,21 @@ export default function AllBusinessesTable({
     <div className="grid gap-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <TableSearch search={search} setSearch={setSearch} />
+        <TableFilter
+          fields={[
+            { value: "isFeatured", label: "Featured" },
+            { value: "isPublished", label: "Published" },
+          ]}
+          filter={filter}
+          setFilter={setFilter}
+        />
       </div>
       <TableContainer
         columns={columns}
         data={businesses}
         size={20}
         search={search}
+        filter={filter}
       />
     </div>
   );
