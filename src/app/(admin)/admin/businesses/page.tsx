@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FetchAllBusinesses } from "@/features/Business/BusinessActions";
+import AllBusinessesTable from "@/features/Business/tables/AllBusinessesTable";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 
-export default function AdminBusinessesPage() {
+export default async function AdminBusinessesPage() {
+  const businesses = await FetchAllBusinesses();
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -18,7 +21,9 @@ export default function AdminBusinessesPage() {
           </Link>
         </Button>
       </CardHeader>
-      <CardContent>place table here</CardContent>
+      <CardContent>
+        <AllBusinessesTable businesses={businesses} />
+      </CardContent>
     </Card>
   );
 }

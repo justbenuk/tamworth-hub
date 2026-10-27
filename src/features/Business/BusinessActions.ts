@@ -3,9 +3,96 @@
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/sessions";
 import z from "zod";
-import { CategorySchema } from "./BusinessSchema";
+import { BusinessSchema, CategorySchema } from "./BusinessSchema";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import slugify from "slugify";
+
+const path = "/admin/businesses";
+
+export async function FetchBusinessById({ id }: { id: string }) {
+  await requireAdmin();
+  return db.business.findUnique({
+    where: { id },
+    include: {
+      categories: { select: { categoryId: true } },
+    },
+  });
+}
+
+export async function FetchAllBusinesses() {
+  await requireAdmin();
+  return db.business.findMany({
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+}
+
+export async function AddBusiness(values: z.infer<typeof BusinessSchema>) {
+  await requireAdmin();
+  try {
+    const validated = BusinessSchema.parse(values);
+    const { categoryIds, ...businessData } = validated;
+
+    await db.business.create({
+      data: {
+        ...businessData,
+        slug: slugify(validated.name, {
+          lower: true,
+        }),
+        categories: {
+          create: [...new Set(categoryIds)].map((categoryId) => ({
+            category: { connect: { id: categoryId } },
+          })),
+        },
+      },
+    });
+    revalidatePath(path);
+    return { success: true, message: "Added new business" };
+  } catch (error) {
+    console.error("Failed to add business", error);
+    return {
+      success: false,
+      message: "Failed to add business",
+    };
+  }
+}
+
+export async function UpdateBusiness(
+  id: string,
+  values: z.infer<typeof BusinessSchema>,
+) {
+  await requireAdmin();
+  try {
+    const validated = BusinessSchema.parse(values);
+    const { categoryIds, ...businessData } = validated;
+    await db.business.update({
+      where: { id },
+      data: {
+        ...businessData,
+        slug: slugify(validated.name, {
+          lower: true,
+        }),
+        categories: {
+          deleteMany: {},
+          create: [...new Set(categoryIds)].map((categoryId) => ({
+            category: { connect: { id: categoryId } },
+          })),
+        },
+      },
+    });
+
+    revalidatePath(path);
+    return { success: true, message: "Updated business" };
+  } catch (error) {
+    console.error("Failed to update business", error);
+    return {
+      success: false,
+      message: "Failed to update business",
+    };
+  }
+}
 
 export async function FetchAllCategoriesAction(take?: number) {
   return db.businessCategory.findMany({
@@ -25,7 +112,6 @@ export async function FetchAllCategoriesAction(take?: number) {
 
 export async function ChangeCategoryIsActive(id: string, isActive: boolean) {
   await requireAdmin();
-
   return db.businessCategory.update({
     where: { id },
     data: {
@@ -47,7 +133,10 @@ export async function FetchCategoryBySlug(slug: string) {
   });
 }
 
-async function saveCategory(values: z.input<typeof CategorySchema>, id?: string) {
+async function saveCategory(
+  values: z.input<typeof CategorySchema>,
+  id?: string,
+) {
   await requireAdmin();
   const result = CategorySchema.safeParse(values);
   if (!result.success) {
@@ -63,7 +152,10 @@ async function saveCategory(values: z.input<typeof CategorySchema>, id?: string)
     .replace(/^-+|-+$/g, "");
 
   if (!id && !slug) {
-    return { success: false, message: "Enter a category name containing letters or numbers" };
+    return {
+      success: false,
+      message: "Enter a category name containing letters or numbers",
+    };
   }
 
   try {
@@ -73,14 +165,17 @@ async function saveCategory(values: z.input<typeof CategorySchema>, id?: string)
       const visited = new Set<string>();
       while (parentId) {
         if (parentId === id || visited.has(parentId)) {
-          throw new Error("Choose a parent outside this category's descendants");
+          throw new Error(
+            "Choose a parent outside this category's descendants",
+          );
         }
         visited.add(parentId);
         const parent = await tx.businessCategory.findUnique({
           where: { id: parentId },
           select: { parentId: true },
         });
-        if (!parent) throw new Error("The selected parent category no longer exists");
+        if (!parent)
+          throw new Error("The selected parent category no longer exists");
         parentId = parent.parentId;
       }
 
@@ -95,14 +190,16 @@ async function saveCategory(values: z.input<typeof CategorySchema>, id?: string)
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return {
         success: false,
-        message: error.code === "P2002"
-          ? "A category with this URL already exists. Choose a different name."
-          : "Unable to save the category. Refresh and try again.",
+        message:
+          error.code === "P2002"
+            ? "A category with this URL already exists. Choose a different name."
+            : "Unable to save the category. Refresh and try again.",
       };
     }
     return {
       success: false,
-      message: error instanceof Error ? error.message : "Unable to save the category",
+      message:
+        error instanceof Error ? error.message : "Unable to save the category",
     };
   }
 
