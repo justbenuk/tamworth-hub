@@ -1,4 +1,5 @@
 import z from "zod";
+import { openingHoursSchema } from "../OpeningHours/OpeningHourSchema";
 
 export const CategorySchema = z.object({
   name: z.string().trim().min(1, "Must have a name"),
@@ -13,12 +14,20 @@ export const CategorySchema = z.object({
 export const BusinessSchema = z.object({
   name: z.string().min(1, "Must have a name"),
   description: z.string().optional(),
-  image: z.union([z.url(), z.literal("")]).optional(),
+  image: z
+    .union([
+      z.url(),
+      z.literal(""),
+      z.literal("/images/business-placeholder.svg"),
+    ])
+    .optional(),
 
   //contact details
   email: z.email().optional(),
   phone: z.string().optional(),
   website: z.string().optional(),
+
+  openingHours: openingHoursSchema,
 
   //location
   addressLine1: z.string().optional(),

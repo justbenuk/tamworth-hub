@@ -19,6 +19,8 @@ model Business {
   town         String? @default("Tamworth")
   postcode     String?
 
+  openingHours OpeningHour[]
+
   // Listing status
   isPublished Boolean @default(false)
   isFeatured  Boolean @default(false)

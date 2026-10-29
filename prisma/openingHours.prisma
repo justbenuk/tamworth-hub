@@ -1,0 +1,10 @@
+model OpeningHour {
+  id String @id @default(cuid())
+
+  dayOfWeek Int
+  openTime  String
+  closeTime String
+
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}

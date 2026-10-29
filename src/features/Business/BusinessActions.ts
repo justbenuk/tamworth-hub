@@ -14,6 +14,7 @@ export async function FetchBusinessBySlug(slug: string) {
   return db.business.findUnique({
     where: { slug },
     include: {
+      openingHours: true,
       categories: {
         include: {
           category: true,
@@ -43,6 +44,7 @@ export async function FetchBusinessById({ id }: { id: string }) {
     where: { id },
     include: {
       categories: { select: { categoryId: true } },
+      openingHours: { orderBy: [{ dayOfWeek: "asc" }, { openTime: "asc" }] },
     },
   });
 }
@@ -68,6 +70,9 @@ export async function AddBusiness(values: z.infer<typeof BusinessSchema>) {
         slug: slugify(validated.name, {
           lower: true,
         }),
+        openingHours: {
+          create: validated.openingHours,
+        },
         categories: {
           create: [...new Set(categoryIds)].map((categoryId) => ({
             category: { connect: { id: categoryId } },
@@ -101,6 +106,10 @@ export async function UpdateBusiness(
         slug: slugify(validated.name, {
           lower: true,
         }),
+        openingHours: {
+          deleteMany: {},
+          create: validated.openingHours,
+        },
         categories: {
           deleteMany: {},
           create: [...new Set(categoryIds)].map((categoryId) => ({
