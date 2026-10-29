@@ -55,7 +55,7 @@ export default async function BusinessDetailView({ params }: Props) {
               {business.website && (
                 <Button className=" px-8 py-6">
                   <Link
-                    href={`http://${business.website as string}`}
+                    href={business.website as string}
                     className="flex flex-row items-center gap-2"
                     target="_blank"
                   >
@@ -77,14 +77,14 @@ export default async function BusinessDetailView({ params }: Props) {
                 </Button>
               )}
               {business.phone && (
-                <Button className="px-8 py-6" variant={"secondary"}>
-                  <Link
-                    href={`tel://${business.phone as string}`}
+                <Button asChild className="px-8 py-6" variant={"secondary"}>
+                  <a
+                    href={`tel:${business.phone.replace(/\s+/g, "")}`}
                     className="flex flex-row items-center gap-2"
                   >
                     <PhoneIcon />
                     <span>Call Now</span>
-                  </Link>
+                  </a>
                 </Button>
               )}
             </div>
