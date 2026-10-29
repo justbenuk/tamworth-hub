@@ -9,6 +9,10 @@ model Business {
   phone   String?
   website String?
 
+  //images
+  image   String?
+  gallery Media[] @relation("BusinessGallery")
+
   // Location
   addressLine1 String?
   addressLine2 String?

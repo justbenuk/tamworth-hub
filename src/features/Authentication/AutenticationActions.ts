@@ -1,5 +1,9 @@
 "use server";
 
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import z from "zod";
 import {
   ForgotPasswordSchema,
@@ -7,17 +11,12 @@ import {
   RegisterSchema,
   ResetPasswordSchema,
 } from "./AuthintactionSchema";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { revalidatePath } from "next/cache";
-import { db } from "@/lib/db";
 
 export async function RegisterUserAction(
   values: z.infer<typeof RegisterSchema>,
 ) {
-  const validated = RegisterSchema.parse(values);
-
   try {
+    const validated = RegisterSchema.parse(values);
     const response = await auth.api.signUpEmail({
       body: {
         ...validated,
@@ -35,10 +34,10 @@ export async function RegisterUserAction(
       },
     });
   } catch (error) {
+    console.error("Failed to register user", error);
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : "Failed to register user",
+      message: "Failed to register user",
     };
   }
   revalidatePath("/", "layout");
@@ -46,9 +45,8 @@ export async function RegisterUserAction(
 }
 
 export async function LoginUserAction(values: z.infer<typeof LoginSchema>) {
-  const validated = LoginSchema.parse(values);
-
   try {
+    const validated = LoginSchema.parse(values);
     await auth.api.signInEmail({
       body: {
         ...validated,
@@ -56,9 +54,10 @@ export async function LoginUserAction(values: z.infer<typeof LoginSchema>) {
       headers: await headers(),
     });
   } catch (error) {
+    console.error("Failed to login", error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : "Failed to login",
+      message: "Failed to login",
     };
   }
   return { success: true, message: "User logged in" };
@@ -68,9 +67,8 @@ export async function ResetPasswordAction(
   values: z.infer<typeof ResetPasswordSchema>,
   token: string,
 ) {
-  const validated = ResetPasswordSchema.parse(values);
-
   try {
+    const validated = ResetPasswordSchema.parse(values);
     await auth.api.resetPassword({
       body: {
         token,
@@ -79,10 +77,10 @@ export async function ResetPasswordAction(
       headers: await headers(),
     });
   } catch (error) {
+    console.log("Failed to reset password", error);
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : "Failed to reset password",
+      message: "Failed to reset password",
     };
   }
   return { success: true, message: "Password Reset" };
@@ -91,9 +89,8 @@ export async function ResetPasswordAction(
 export async function ForgotPasswordAction(
   values: z.infer<typeof ForgotPasswordSchema>,
 ) {
-  const validated = ForgotPasswordSchema.parse(values);
-
   try {
+    const validated = ForgotPasswordSchema.parse(values);
     await auth.api.requestPasswordReset({
       body: {
         email: validated.email,
@@ -102,10 +99,10 @@ export async function ForgotPasswordAction(
       headers: await headers(),
     });
   } catch (error) {
+    console.log("Failed to process reset", error);
     return {
       success: true,
-      message:
-        error instanceof Error ? error.message : "Failed to process reset",
+      message: "Failed to process reset",
     };
   }
   return {

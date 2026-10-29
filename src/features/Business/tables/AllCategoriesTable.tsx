@@ -7,8 +7,7 @@ import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { UpdateCategory } from "../BusinessActions";
-import UpdateCatogeryForm from "../forms/UpdateCatogeryForm";
+import CategoryForm from "../forms/CategoryForm";
 
 type CategoryWithCountProps = Prisma.BusinessCategoryGetPayload<{
   include: {
@@ -53,7 +52,7 @@ export default function AllCategoriesTable({
               <Eye className="size-4" />
             </Link>
           </Button>
-          <UpdateCatogeryForm category={row.data} categories={categories} />
+          <CategoryForm mode="edit" category={row.data} categories={categories} />
         </div>
       ),
     },

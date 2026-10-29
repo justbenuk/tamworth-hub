@@ -1,3 +1,4 @@
+import AuthMenu from "@/components/Menus/AuthMenu";
 import {
   Sidebar,
   SidebarContent,
@@ -8,10 +9,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import AdminBusinessMenus from "@/features/Business/components/AdminBusinessMenus";
 import { CastleIcon, LayoutDashboardIcon } from "lucide-react";
 import Link from "next/link";
 import AdminSiteMenuItems from "./AdminSiteMenuItems";
-import AdminBusinessMenus from "@/features/Business/components/AdminBusinessMenus";
 
 export default function AdminSidebar() {
   return (
@@ -42,7 +43,9 @@ export default function AdminSidebar() {
         </SidebarGroup>
         <AdminSiteMenuItems />
       </SidebarContent>
-      <SidebarFooter>g</SidebarFooter>
+      <SidebarFooter>
+        <AuthMenu />
+      </SidebarFooter>
     </Sidebar>
   );
 }

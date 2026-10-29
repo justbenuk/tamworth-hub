@@ -49,7 +49,7 @@ type CategoryProps =
       categories: BusinessCategory[];
     };
 
-export default function CbtegoryForm(props: CategoryProps) {
+export default function CategoryForm(props: CategoryProps) {
   const activeId = useId();
   const [open, setOpen] = useState(false);
   const router = useRouter();

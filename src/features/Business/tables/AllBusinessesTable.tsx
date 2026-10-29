@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Business } from "@prisma/client";
 import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { format } from "date-fns";
-import { PencilIcon } from "lucide-react";
+import { EyeIcon, PencilIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import DeleteBusinessForm from "../forms/DeleteBusinessForm";
 
 export default function AllBusinessesTable({
   businesses,
@@ -31,6 +32,14 @@ export default function AllBusinessesTable({
     {
       field: "slug",
       headerName: "Slug",
+    },
+    {
+      field: "phone",
+      headerName: "Phone Number",
+    },
+    {
+      field: "email",
+      headerName: "Email",
     },
     {
       field: "isFeatured",
@@ -58,12 +67,18 @@ export default function AllBusinessesTable({
     {
       headerName: "Actions",
       cellRenderer: (row: ICellRendererParams) => (
-        <div className="h-full flex items-center">
-          <Button asChild variant={"ghost"} size={"icon"}>
-            <Link href={`/admin/businesses/${row.data.id}`}>
-              <PencilIcon />
+        <div className="h-full flex items-center gap-3">
+          <Button asChild variant={"outline"} size={"icon-sm"}>
+            <Link href={`/businesses/${row.data.slug}`}>
+              <EyeIcon className="size-3" />
             </Link>
           </Button>
+          <Button asChild variant={"outline"} size={"icon-sm"}>
+            <Link href={`/admin/businesses/${row.data.id}`}>
+              <PencilIcon className="size-3" />
+            </Link>
+          </Button>
+          <DeleteBusinessForm id={row.data.id} />
         </div>
       ),
     },

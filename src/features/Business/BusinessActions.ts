@@ -2,13 +2,40 @@
 
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/sessions";
-import z from "zod";
-import { BusinessSchema, CategorySchema } from "./BusinessSchema";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
+import z from "zod";
+import { BusinessSchema, CategorySchema } from "./BusinessSchema";
 
 const path = "/admin/businesses";
+
+export async function FetchBusinessBySlug(slug: string) {
+  return db.business.findUnique({
+    where: { slug },
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
+  });
+}
+
+export default async function DeleteBusinessById(id: string) {
+  await requireAdmin();
+  try {
+    await db.business.delete({
+      where: { id },
+    });
+    revalidatePath(path);
+    return { success: true, message: "Business Deleted" };
+  } catch (error) {
+    console.error("Failed to delete business", error);
+    return { success: false, message: "Failed to delete business" };
+  }
+}
 
 export async function FetchBusinessById({ id }: { id: string }) {
   await requireAdmin();
@@ -144,12 +171,7 @@ async function saveCategory(
   }
 
   const data = { ...result.data, parentId: result.data.parentId || null };
-  const slug = data.name
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  const slug = slugify(data.name, { lower: true, strict: true });
 
   if (!id && !slug) {
     return {

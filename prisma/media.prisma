@@ -1,0 +1,17 @@
+model Media {
+  id          String  @id @default(cuid())
+  name        String
+  url         String
+  fileKey     String  @unique
+  mimeType    String
+  size        Int
+  width       Int?
+  height      Int?
+  alt         String?
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  businesses Business[] @relation("BusinessGallery")
+}

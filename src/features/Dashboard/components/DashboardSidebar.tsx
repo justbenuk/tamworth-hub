@@ -1,3 +1,4 @@
+import AuthMenu from "@/components/Menus/AuthMenu";
 import {
   Sidebar,
   SidebarContent,
@@ -79,7 +80,9 @@ export default function DashboardSidebar() {
           </SidebarGroup>
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>g</SidebarFooter>
+      <SidebarFooter>
+        <AuthMenu />
+      </SidebarFooter>
     </Sidebar>
   );
 }

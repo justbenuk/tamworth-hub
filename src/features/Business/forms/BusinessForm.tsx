@@ -1,14 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { BusinessCategory, Prisma } from "@prisma/client";
-import { useRouter } from "next/navigation";
-import { Controller, useForm } from "react-hook-form";
-import { BusinessSchema } from "../BusinessSchema";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AddBusiness, UpdateBusiness } from "../BusinessActions";
-import { toast } from "sonner";
 import {
   Field,
   FieldContent,
@@ -17,8 +10,17 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import MediaPicker from "@/features/media/MediaPicker";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { BusinessCategory, Prisma } from "@prisma/client";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
+import { AddBusiness, UpdateBusiness } from "../BusinessActions";
+import { BusinessSchema } from "../BusinessSchema";
 import CategoryMultiSelect from "../components/CategoryMultiSelect";
-import { Button } from "@/components/ui/button";
 
 export type BusinessWithCategories = Prisma.BusinessGetPayload<{
   include: { categories: { select: { categoryId: true } } };
@@ -45,7 +47,8 @@ export default function BusinessForm(props: BusinessProps) {
   const defaultValues = {
     name: business?.name ?? "",
     description: business?.description ?? "",
-    email: business?.email ?? "",
+    image: business?.image ?? "",
+    email: business?.email ?? undefined,
     phone: business?.phone ?? "",
     website: business?.website ?? "",
     addressLine1: business?.addressLine1 ?? "",
@@ -88,6 +91,50 @@ export default function BusinessForm(props: BusinessProps) {
   return (
     <form className="grid gap-6" onSubmit={form.handleSubmit(handleForm)}>
       <h4>{isEditing ? `Edit ${business?.name}` : "New Business"}</h4>
+      <Card>
+        <CardHeader>
+          <CardTitle>Cover Image</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Controller
+            name="image"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                {field.value ? (
+                  <Image
+                    src={field.value}
+                    alt="Business Image"
+                    height={1000}
+                    width={1000}
+                    className="h-auto w-full max-h-[30dvh]"
+                  />
+                ) : null}
+                <div className="flex flex-row items-center justify-end gap-3">
+                  <MediaPicker
+                    onSelect={(media) => field.onChange(media.url)}
+                    triggerLabel={
+                      field.value ? "Change Cover Image" : "Add Cover Image"
+                    }
+                  />
+                  {field.value && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => field.onChange("")}
+                    >
+                      Remove Cover Image
+                    </Button>
+                  )}
+                </div>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </CardContent>
+      </Card>
       <div className="grid ">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_280px]">
           <div className="grid gap-6">
