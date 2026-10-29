@@ -1,0 +1,36 @@
+model Business {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+
+  // Contact details
+  email   String?
+  phone   String?
+  website String?
+
+  //images
+  image   String?
+  gallery Media[] @relation("BusinessGallery")
+
+  // Location
+  addressLine1 String?
+  addressLine2 String?
+  town         String? @default("Tamworth")
+  postcode     String?
+
+  openingHours OpeningHour[]
+
+  // Listing status
+  isPublished Boolean @default(false)
+  isFeatured  Boolean @default(false)
+
+  // Category assignments
+  categories BusinessCategoryAssignment[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isPublished, name])
+}

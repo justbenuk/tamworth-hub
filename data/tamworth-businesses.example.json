@@ -1,0 +1,13 @@
+{
+  "source": "Manually researched businesses. Replace this example with real details.",
+  "businesses": [
+    {
+      "approved": false,
+      "name": "Example business — replace me",
+      "categorySlug": "shopping-retail",
+      "town": "Tamworth",
+      "sourceUrl": "https://example.com",
+      "reviewNotes": "Example only. Confirm current trading status and independence before setting approved to true."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+model BusinessCategory {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  icon        String?
+
+  // Category hieracrchy
+  parentId String?
+  parent   BusinessCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
+  children BusinessCategory[] @relation("CategoryHierarchy")
+
+  // Display settings 
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  //Business Assignments
+  businessCategoryAssignments BusinessCategoryAssignment[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([isActive, sortOrder])
+}
+
+model BusinessCategoryAssignment {
+  businessId String
+  categoryId String
+
+  business Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  category BusinessCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([businessId, categoryId])
+  @@index([categoryId])
+}

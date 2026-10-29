@@ -8,7 +8,7 @@ type PageControllerProps = {
 };
 
 const sizes = {
-  small: "max-w-lg w-full",
+  small: "max-w-5xl w-full",
   medium: "max-w-7xl",
   large: "container",
 };

@@ -1,3 +1,4 @@
+import AuthMenu from "@/components/Menus/AuthMenu";
 import {
   Sidebar,
   SidebarContent,
@@ -8,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import AdminBusinessMenus from "@/features/Business/components/AdminBusinessMenus";
 import { CastleIcon, LayoutDashboardIcon } from "lucide-react";
 import Link from "next/link";
 import AdminSiteMenuItems from "./AdminSiteMenuItems";
@@ -28,21 +30,22 @@ export default function AdminSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
-          <SidebarGroup>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={"dashboard"}>
-                <Link href={"/admin"}>
-                  <LayoutDashboardIcon />
-                  <span>Dashboard</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarGroup>
-          <AdminSiteMenuItems />
-        </SidebarMenu>
+        <SidebarGroup>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip={"dashboard"}>
+              <Link href={"/admin"}>
+                <LayoutDashboardIcon />
+                <span>Dashboard</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <AdminBusinessMenus />
+        </SidebarGroup>
+        <AdminSiteMenuItems />
       </SidebarContent>
-      <SidebarFooter>g</SidebarFooter>
+      <SidebarFooter>
+        <AuthMenu />
+      </SidebarFooter>
     </Sidebar>
   );
 }

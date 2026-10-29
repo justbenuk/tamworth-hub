@@ -1,16 +1,15 @@
 "use server";
 
-import z from "zod";
-import { ContactSchema } from "./ContactSchemas";
 import { db } from "@/lib/db";
-import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/sessions";
 import { ContactStatus } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import z from "zod";
+import { ContactSchema } from "./ContactSchemas";
 
 export async function ContactFormAction(values: z.infer<typeof ContactSchema>) {
-  const validated = ContactSchema.parse(values);
-
   try {
+    const validated = ContactSchema.parse(values);
     await db.contactSubmission.create({
       data: {
         ...validated,
@@ -20,9 +19,10 @@ export async function ContactFormAction(values: z.infer<typeof ContactSchema>) {
     revalidatePath("/admin/messages");
     return { success: true, message: "Message Sent" };
   } catch (error) {
+    console.error("Failed to send message", error);
     return {
-      sucess: false,
-      message: error instanceof Error ? error.message : "Failed to send form",
+      success: false,
+      message: "Failed to send message",
     };
   }
 }
@@ -41,7 +41,6 @@ export async function UpdateContactFormStatus(
   status: ContactStatus,
 ) {
   await requireAdmin();
-
   return db.contactSubmission.update({
     where: { id },
     data: { status },
@@ -50,23 +49,14 @@ export async function UpdateContactFormStatus(
 
 export async function GetContactSubmisionById({ id }: { id: string }) {
   await requireAdmin();
-
   const data = await db.contactSubmission.findUnique({
     where: { id },
   });
-
-  if (data) {
-    await db.contactSubmission.update({
-      where: { id },
-      data: { status: ContactStatus.IN_PROGRESS },
-    });
-  }
   return data;
 }
 
 export async function DeleteSubmissionById(id: string) {
   await requireAdmin();
-
   try {
     await db.contactSubmission.delete({
       where: { id },
@@ -74,10 +64,10 @@ export async function DeleteSubmissionById(id: string) {
     revalidatePath("/admin/messages");
     return { success: true, message: "Submission deleted" };
   } catch (error) {
+    console.error("Failed to delete message", error);
     return {
       success: false,
-      message:
-        error instanceof Error ? error.message : "Failed to delete submission",
+      message: "Failed to delete submission",
     };
   }
 }

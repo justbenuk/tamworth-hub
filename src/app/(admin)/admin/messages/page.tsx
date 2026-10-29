@@ -11,7 +11,7 @@ export default async function AdminMessagesPage() {
         <CardTitle>Messages</CardTitle>
       </CardHeader>
       <CardContent>
-        <AllMessagesTable messages={messages} />;
+        <AllMessagesTable messages={messages} />
       </CardContent>
     </Card>
   );

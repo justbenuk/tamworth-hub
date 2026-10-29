@@ -1,5 +1,4 @@
 "use client";
-import { format } from "date-fns";
 import {
   Table,
   TableBody,
@@ -10,13 +9,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ActivityLog } from "@prisma/client";
+import { format } from "date-fns";
 
 export default function SmallActivityLogTable({
   logs,
 }: {
   logs: ActivityLog[];
 }) {
-  console.log(logs);
   return (
     <Table>
       <TableCaption>Last 10 activities logged</TableCaption>

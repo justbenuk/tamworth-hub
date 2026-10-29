@@ -21,6 +21,10 @@ const MENUITEMS = [
     link: "/jobs",
   },
   {
+    name: "Charities",
+    link: "/charities",
+  },
+  {
     name: "Community",
     link: "/community",
   },

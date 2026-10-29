@@ -1,11 +1,16 @@
+import { auth } from "@/lib/auth";
 import { format } from "date-fns";
+import { headers } from "next/headers";
+import Link from "next/link";
 import PageContainer from "../PageContainer";
-import AuthMenu from "./AuthMenu";
 
-export default function TopMenu() {
+export default async function TopMenu() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   const date = new Date();
   return (
-    <div className="bg-neutral-800 text-primary-foreground py-2">
+    <div className="site-footer py-2">
       <PageContainer>
         <div className="flex flex-row justify-between items-center">
           <div className="text-xs font-semibold">
@@ -13,7 +18,13 @@ export default function TopMenu() {
               useAdditionalDayOfYearTokens: true,
             }).toString()}
           </div>
-          <AuthMenu />
+          <div className="text-xs uppercase font-semibold">
+            {session?.user ? (
+              <Link href={"/dashboard"}>My Account</Link>
+            ) : (
+              <Link href={"/access"}>My Account</Link>
+            )}
+          </div>
         </div>
       </PageContainer>
     </div>
