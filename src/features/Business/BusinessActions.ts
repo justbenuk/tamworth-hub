@@ -7,21 +7,94 @@ import { revalidatePath } from "next/cache";
 import slugify from "slugify";
 import z from "zod";
 import { BusinessSchema, CategorySchema } from "./BusinessSchema";
+import { notFound } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const path = "/admin/businesses";
 
+export async function FetchParentCategories() {
+  return db.businessCategory.findMany({
+    where: {
+      parentId: null
+    }
+  })
+}
+
+export async function FetchChildCategorysById(id: string) {
+  return db.businessCategory.findMany({
+    where: {
+      parentId: id
+    }
+  })
+}
+
+export async function FetchBusinessesByCategory(categoryId: string) {
+  return db.business.findMany({
+    where: {
+      isPublished: true,
+      categories: {
+        some: {
+          category: {
+            id: categoryId
+          }
+        }
+      }
+    },
+    include: {
+      categories: {
+        include: {
+          category: true
+        }
+      }
+    },
+    orderBy: {
+      isFeatured: 'desc'
+    }
+
+  })
+}
+
+
 export async function FetchBusinessBySlug(slug: string) {
-  return db.business.findUnique({
-    where: { slug },
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
+
+  const business = await db.business.findUnique({
+    where: {
+      slug: slug
+    },
     include: {
       openingHours: true,
       categories: {
         include: {
-          category: true,
-        },
-      },
+          category: true
+        }
+      }
+    }
+  })
+
+  if (!business || (business.isPublished !== true && session?.user.role !== 'admin')) return notFound()
+
+  return business
+}
+
+export async function FetchFeaturedBusinesses(take?: number) {
+  return db.business.findMany({
+    where: {
+      isPublished: true,
+      isFeatured: true
     },
-  });
+    include: {
+      categories: {
+        include: {
+          category: true
+        }
+      }
+    },
+    take
+  })
 }
 
 export default async function DeleteBusinessById(id: string) {
