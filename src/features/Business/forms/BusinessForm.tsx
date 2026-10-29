@@ -22,6 +22,7 @@ import { AddBusiness, UpdateBusiness } from "../BusinessActions";
 import { BusinessSchema } from "../BusinessSchema";
 import CategoryMultiSelect from "../components/CategoryMultiSelect";
 import OpeningHoursField from "@/features/OpeningHours/OpeningHoursField";
+import Editor from "@/components/Editor";
 
 export type BusinessWithCategories = Prisma.BusinessGetPayload<{
   include: {
@@ -36,15 +37,15 @@ export type BusinessWithCategories = Prisma.BusinessGetPayload<{
 
 type BusinessProps =
   | {
-      mode: "add";
-      business?: never;
-      categories: BusinessCategory[];
-    }
+    mode: "add";
+    business?: never;
+    categories: BusinessCategory[];
+  }
   | {
-      mode: "edit";
-      business: BusinessWithCategories;
-      categories: BusinessCategory[];
-    };
+    mode: "edit";
+    business: BusinessWithCategories;
+    categories: BusinessCategory[];
+  };
 
 export default function BusinessForm(props: BusinessProps) {
   const router = useRouter();
@@ -183,7 +184,7 @@ export default function BusinessForm(props: BusinessProps) {
                       <Field>
                         <FieldLabel>Description</FieldLabel>
                         <FieldContent>
-                          <Textarea {...field} />
+                          <Editor value={field.value as string} onChange={field.onChange} onBlur={field.onBlur} />
                           {fieldState.invalid && (
                             <FieldError errors={[fieldState.error]} />
                           )}

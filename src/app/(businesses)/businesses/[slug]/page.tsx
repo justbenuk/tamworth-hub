@@ -5,11 +5,13 @@ import { FetchBusinessBySlug } from "@/features/Business/BusinessActions";
 import {
   ArrowRight,
   GlobeIcon,
+  ListIcon,
   LocateIcon,
   Mail,
   MapIcon,
   PhoneIcon,
   PinIcon,
+  UsersIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import EditorContent from "@/components/EditorContent";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -37,12 +40,12 @@ export default async function BusinessDetailView({ params }: Props) {
   if (!business) return notFound();
   return (
     <PageContainer className="py-10" size="medium">
-      <div className="grid grid-cols-1 lg:gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <div className="min-w-0">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
+        <div className="min-w-0 grid gap-6">
           <div className="grid gap-6">
             <h1>{business.name}</h1>
-            <div className="flex flex-row items-center gap-1">
-              <PinIcon className="text-primary" />
+            <div className="flex flex-col lg:flex-row lg:items-center gap-1">
+              <PinIcon className="hidden lg:block text-primary" />
               <span>{business.addressLine1}</span>
               <span>{business.addressLine2}</span>
               <span>{business.town}</span>
@@ -50,7 +53,7 @@ export default async function BusinessDetailView({ params }: Props) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6">
               {business.website && (
-                <Button className="text-xl px-8 py-6">
+                <Button className=" px-8 py-6">
                   <Link
                     href={`http://${business.website as string}`}
                     className="flex flex-row items-center gap-2"
@@ -62,7 +65,7 @@ export default async function BusinessDetailView({ params }: Props) {
                 </Button>
               )}
               {business.postcode && (
-                <Button variant={"secondary"} className="text-xl px-8 py-6">
+                <Button variant={"secondary"} className="px-8 py-6">
                   <Link
                     href={`https://www.google.com/maps/place/${business.postcode}`}
                     target="_blank"
@@ -74,7 +77,7 @@ export default async function BusinessDetailView({ params }: Props) {
                 </Button>
               )}
               {business.phone && (
-                <Button className="text-xl px-8 py-6" variant={"secondary"}>
+                <Button className="px-8 py-6" variant={"secondary"}>
                   <Link
                     href={`tel://${business.phone as string}`}
                     className="flex flex-row items-center gap-2"
@@ -94,13 +97,71 @@ export default async function BusinessDetailView({ params }: Props) {
                 className="w-full"
               />
             </div>
-            <p className="text-lead">{business.description}</p>
+            <EditorContent content={business.description as string} />
           </div>
+          <Card>
+            <CardHeader className="border-b flex flex-row items-center justify-between">
+              <CardTitle className="text-xl">Key Information</CardTitle>
+              <KeyIcon />
+            </CardHeader>
+            <CardContent>
+              <Table className="p-0">
+                <TableBody className="p-0">
+                  <TableRow className="even:bg-muted/50 hover:bg-muted/70">
+                    <TableCell>
+                      <LocateIcon className="size-6" />
+                    </TableCell>
+                    <TableCell className="w-full text-lg">
+                      {business.addressLine1} {business.addressLine2}{" "}
+                      {business.town} {business.postcode}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow className="even:bg-muted/50 hover:bg-muted/70">
+                    <TableCell>
+                      <PhoneIcon className="size-6" />
+                    </TableCell>
+                    <TableCell className="w-full text-lg">
+                      {business.phone}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow className="even:bg-muted/50 hover:bg-muted/70">
+                    <TableCell>
+                      <GlobeIcon className="size-6" />
+                    </TableCell>
+                    <TableCell className="w-full text-lg">
+                      {business.website}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow className="even:bg-muted/50 hover:bg-muted/70">
+                    <TableCell>
+                      <Mail className="size-6" />
+                    </TableCell>
+                    <TableCell className="w-full text-lg">
+                      {business.email}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
         </div>
-        <aside className="lg:space-y-10">
-          <Card className="bg-neutral-200">
-            <CardHeader className="border-b border-black/10">
+        <aside className="grid gap-6">
+          <Card>
+            <CardHeader className="border-b flex flex-row items-center justify-between">
+              <CardTitle className="text-xl">Opening Hours</CardTitle>
+              <div>
+                <Clock />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <OpeningHours hours={business.openingHours} />
+            </CardContent>
+          </Card>
+          <Card >
+            <CardHeader className="border-b flex flex-row items-center justify-between">
               <CardTitle className="text-xl">Categories</CardTitle>
+              <ListIcon />
             </CardHeader>
             <CardContent className="flex flex-wrap gap-2">
               {business.categories.map((cat) => (
@@ -113,8 +174,9 @@ export default async function BusinessDetailView({ params }: Props) {
             </CardContent>
           </Card>
           <Card>
-            <CardHeader className="border-b">
+            <CardHeader className="border-b flex flex-row items-center justify-between">
               <CardTitle className="text-xl">Share this business</CardTitle>
+              <UsersIcon />
             </CardHeader>
             <CardContent>coming Soon</CardContent>
           </Card>
@@ -146,70 +208,6 @@ export default async function BusinessDetailView({ params }: Props) {
             </Card>
           </div>
         </aside>
-      </div>
-      <div className="my-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 justify-center gap-10 mt-8">
-          <div className="col-span-1 md:col-span-2 lg:col-span-4">
-            <Card>
-              <CardHeader className="border-b flex flex-row items-center justify-between">
-                <CardTitle className="text-xl">Key Information</CardTitle>
-                <KeyIcon />
-              </CardHeader>
-              <CardContent>
-                <Table className="p-0">
-                  <TableBody className="p-0">
-                    <TableRow className="even:bg-muted/50 hover:bg-muted/70">
-                      <TableCell>
-                        <LocateIcon className="size-6" />
-                      </TableCell>
-                      <TableCell className="w-full text-lg">
-                        {business.addressLine1} {business.addressLine2}{" "}
-                        {business.town} {business.postcode}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="even:bg-muted/50 hover:bg-muted/70">
-                      <TableCell>
-                        <PhoneIcon className="size-6" />
-                      </TableCell>
-                      <TableCell className="w-full text-lg">
-                        {business.phone}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="even:bg-muted/50 hover:bg-muted/70">
-                      <TableCell>
-                        <GlobeIcon className="size-6" />
-                      </TableCell>
-                      <TableCell className="w-full text-lg">
-                        {business.website}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="even:bg-muted/50 hover:bg-muted/70">
-                      <TableCell>
-                        <Mail className="size-6" />
-                      </TableCell>
-                      <TableCell className="w-full text-lg">
-                        {business.email}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="col-span-1 lg:col-span-2">
-            <Card>
-              <CardHeader className="border-b flex flex-row items-center justify-between">
-                <CardTitle className="text-xl">Opening Hours</CardTitle>
-                <div>
-                  <Clock />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <OpeningHours hours={business.openingHours} />
-              </CardContent>
-            </Card>
-          </div>
-        </div>
       </div>
     </PageContainer>
   );
