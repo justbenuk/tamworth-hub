@@ -13,6 +13,33 @@ import { headers } from "next/headers";
 
 const path = "/admin/businesses";
 
+export async function FetchAllPublishedBusinesses(page = 1) {
+  const pageSize = 12;
+  const where = { isPublished: true };
+  const total = await db.business.count({ where });
+  const totalPages = Math.ceil(total / pageSize);
+  const currentPage = Math.min(
+    Number.isSafeInteger(page) && page > 0 ? page : 1,
+    Math.max(1, totalPages),
+  );
+
+  const businesses = await db.business.findMany({
+    where,
+    include: {
+      categories: {
+        include: {
+          category: true
+        }
+      }
+    },
+    skip: (currentPage - 1) * pageSize,
+    take: pageSize,
+    orderBy: { name: "asc" },
+  });
+
+  return { businesses, totalPages, currentPage };
+}
+
 export async function FetchParentCategories() {
   return db.businessCategory.findMany({
     where: {
