@@ -43,7 +43,8 @@ export async function FetchAllPublishedBusinesses(page = 1) {
 export async function FetchParentCategories() {
   return db.businessCategory.findMany({
     where: {
-      parentId: null
+      parentId: null,
+      isActive: true
     }
   })
 }
@@ -232,6 +233,9 @@ export async function UpdateBusiness(
 
 export async function FetchAllCategoriesAction(take?: number) {
   return db.businessCategory.findMany({
+    where: {
+      isActive: true
+    },
     take,
     orderBy: {
       sortOrder: "asc",

@@ -1,15 +1,13 @@
 import PageContainer from "@/components/PageContainer";
 import AppPagination from "@/components/Pagination";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { FetchParentCategories } from "@/features/Business/BusinessActions";
 import BusinessCard from "@/features/Business/components/BusinessCard";
-import CategoryIcon from "@/features/Business/components/CategoryIcon";
+import CategoryCard from "@/features/Business/components/CategoryCard";
 import { SearchForm } from "@/features/Search/SearchForm";
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
-
 
 
 const PAGE_SIZE = 6;
@@ -93,7 +91,7 @@ export default async function BusinessesPage({
           <div className="flex flex-row items-center justify-between">
             <h3>Browse by category</h3>
             <Link
-              href={"/directory/all"}
+              href={"/businesses/categories"}
               className="flex flex-row items-center gap-2 text-primary"
             >
               <span>View all categories</span>
@@ -102,14 +100,7 @@ export default async function BusinessesPage({
           </div>
           <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
             {parentcategories.map((cat) => (
-              <Link key={cat.id} href={`/businesses/categories/${cat.slug}`}>
-                <Card className="min-w-0 justify-center bg-gray-100">
-                  <CardHeader className="flex flex-row items-center gap-2">
-                    <CategoryIcon name={cat.icon} size={16} />
-                    <CardTitle className="min-w-0 wrap-break-word">{cat.name}</CardTitle>
-                  </CardHeader>
-                </Card>
-              </Link>
+              <CategoryCard key={cat.id} category={cat} />
             ))}
           </div>
         </div>
