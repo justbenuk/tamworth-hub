@@ -31,11 +31,11 @@ const caveat = localFont({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s ˘| Tamworth Hub",
-    default: "Tamworth Hub",
+    template: "%s | Tamworth Hub | Local Businesses, Jobs, Events & News ",
+    default: "Tamworth Hub | Local Businesses, Jobs, Events & News",
   },
   description:
-    "Tamworth Hub is a community 1st platform for local businesses, charitys and community news and events",
+    "Discover everything Tamworth has to offer with Tamworth Hub. Explore local businesses, jobs, events, news, charities and community information, all in one place.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

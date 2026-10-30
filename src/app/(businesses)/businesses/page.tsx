@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import PageContainer from "@/components/PageContainer";
 import AppPagination from "@/components/Pagination";
 import { FetchParentCategories } from "@/features/Business/BusinessActions";
@@ -8,6 +9,12 @@ import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
+
+
+export const metadata: Metadata = {
+  title: 'Tamworth Business Directory',
+  description: 'Discover local businesses in Tamworth with Tamworth Hub. Find trusted shops, tradespeople, restaurants and services in your area, all in one place.'
+};
 
 
 const PAGE_SIZE = 6;
@@ -34,8 +41,30 @@ export default async function BusinessesPage({
     isPublished: true,
     ...(search && {
       OR: [
-        { name: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          categories: {
+            some: {
+              category: {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        },
       ],
     }),
   };

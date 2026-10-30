@@ -23,14 +23,54 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import EditorContent from "@/components/EditorContent";
+import type { Metadata } from "next";
+
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const business = await FetchBusinessBySlug(slug);
+  if (!business) {
+    notFound();
+  }
+
+  const title = `${business.name} in Tamworth`;
+  const description =
+    business.description?.trim().slice(0, 155) ||
+    `Discover ${business.name} in Tamworth. Find business information, opening hours and contact details on Tamworth Hub.`;
+
+  const url = `/businesses/${business.slug}`;
+
+  return {
+    title: {
+      absolute: `${title} | Tamworth Hub`,
+    },
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "Tamworth Hub",
+      type: "website",
+      locale: "en_GB",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 export default async function BusinessDetailView({ params }: Props) {
   const { slug } = await params;
