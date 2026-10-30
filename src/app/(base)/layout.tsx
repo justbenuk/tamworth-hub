@@ -11,6 +11,7 @@ export default function BaseLayout({ children }: { children: ReactNode }) {
         <TopMenu />
         <MainHeader />
         <SiteMenu />
+        <div className="lg:hidden"></div>
       </div>
       <div className="flex-1">{children}</div>
       <Footer />

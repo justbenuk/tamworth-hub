@@ -32,7 +32,9 @@ export default function BusinessCard({ business }: { business: BusinessProps }) 
       </CardHeader>
       <CardContent className="flex flex-row items-center justify-between">
         <div>
-          <h3>{business.name}</h3>
+          <Link href={`/businesses/${business.slug}`}>
+            <h3>{business.name}</h3>
+          </Link>
           <div className="flex flex-wrap space-x-2">
             {business.categories.map((cat) => (
               <span className="text-primary font-semibold" key={cat.category.id}>{cat.category.name}</span>

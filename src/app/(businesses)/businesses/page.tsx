@@ -1,13 +1,20 @@
+import type { Metadata } from 'next';
 import PageContainer from "@/components/PageContainer";
 import AppPagination from "@/components/Pagination";
-import { FetchParentCategories } from "@/features/Business/BusinessActions";
+import { FetchAllCategoriesAction } from "@/features/Business/BusinessActions";
 import BusinessCard from "@/features/Business/components/BusinessCard";
 import CategoryCard from "@/features/Business/components/CategoryCard";
-import { SearchForm } from "@/features/Search/SearchForm";
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
+import BusinessSearch from '@/features/Search/BusinessSearchForm';
+
+
+export const metadata: Metadata = {
+  title: 'Tamworth Business Directory',
+  description: 'Discover local businesses in Tamworth with Tamworth Hub. Find trusted shops, tradespeople, restaurants and services in your area, all in one place.'
+};
 
 
 const PAGE_SIZE = 6;
@@ -16,15 +23,31 @@ export default async function BusinessesPage({
   searchParams,
 }: {
   searchParams: Promise<{
-    search?: string;
-    page?: string;
+    search?: string | string[];
+    category?: string | string[];
+    location?: string | string[];
+    page?: string | string[];
   }>;
 }) {
-  const parentcategories = await FetchParentCategories()
+  const [categories, addresses] = await Promise.all([
+    FetchAllCategoriesAction(),
+    db.business.findMany({
+      where: { isPublished: true, addressLine2: { not: null } },
+      select: { addressLine2: true },
+      distinct: ["addressLine2"],
+      orderBy: { addressLine2: "asc" },
+    }),
+  ]);
+  const parentcategories = categories.filter((item) => item.parentId === null);
+  const locations = addresses.flatMap(({ addressLine2 }) =>
+    addressLine2?.trim() ? [{ label: addressLine2, value: addressLine2 }] : [],
+  );
   const params = await searchParams;
 
-  const search = (params.search ?? "").trim();
-  const requestedPage = Number(params.page);
+  const search = typeof params.search === "string" ? params.search.trim() : "";
+  const category = typeof params.category === "string" ? params.category : "";
+  const location = typeof params.location === "string" ? params.location : "";
+  const requestedPage = typeof params.page === "string" ? Number(params.page) : 1;
   const page =
     Number.isSafeInteger(requestedPage) && requestedPage > 0
       ? requestedPage
@@ -32,10 +55,36 @@ export default async function BusinessesPage({
 
   const where: Prisma.BusinessWhereInput = {
     isPublished: true,
+    ...(category && {
+      categories: { some: { category: { slug: category, isActive: true } } },
+    }),
+    ...(location && { addressLine2: location }),
     ...(search && {
       OR: [
-        { name: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          categories: {
+            some: {
+              category: {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        },
       ],
     }),
   };
@@ -62,19 +111,33 @@ export default async function BusinessesPage({
     <PageContainer className="py-10">
       <div className="grid gap-10">
         <div>
-          <SearchForm
+          <BusinessSearch
+            title="Find local businesses in Tamworth"
+            description="Discover local shops, tradespeople, restaurants and services across Tamworth."
             action="/businesses"
-            defaultValue={search}
             placeholder="Search businesses..."
+            search={search}
+            category={category}
+            location={location}
+            locations={locations}
+            categories={categories.map((item) => ({
+              label: item.name,
+              value: item.slug,
+            }))}
+            popularSearches={[
+              "Plumber",
+              "Electrician",
+              "Hairdresser",
+              "Restaurant",
+              "Takeaway",
+              "Car Garage",
+              "Gardener",
+            ]}
           />
-
-          <p className="text-sm text-muted-foreground">
-            {total} {total === 1 ? "business" : "businesses"} found
-          </p>
 
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {businesses.map((business) => (
             <BusinessCard key={business.id} business={business} />
           ))}
@@ -84,7 +147,7 @@ export default async function BusinessesPage({
           page={currentPage}
           totalPages={totalPages}
           pathname="/businesses"
-          searchParams={{ search }}
+          searchParams={{ search, category, location }}
         />
 
         <div>
