@@ -16,7 +16,7 @@ export default function EmptyCard({
 }: {
   title: string;
   description: string;
-  children: ReactNode;
+  children?: ReactNode;
 }) {
   return (
     <Empty className="border-3 bg-red-500/30 border-red-500/50">

@@ -10,6 +10,7 @@ import { EyeIcon, PencilIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import DeleteBusinessForm from "../forms/DeleteBusinessForm";
+import Image from "next/image";
 
 export default function AllBusinessesTable({
   businesses,
@@ -25,6 +26,14 @@ export default function AllBusinessesTable({
   });
 
   const columns: ColDef<Business>[] = [
+    {
+      field: 'image',
+      cellRenderer: (row: ICellRendererParams) => (
+        <div className="h-full flex items-center">
+          <Image src={row.data.image} alt={row.data.name} width={50} height={50} />
+        </div>
+      )
+    },
     {
       field: "name",
       headerName: "Name",

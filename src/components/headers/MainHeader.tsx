@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import PageContainer from "../PageContainer";
+import MobileMenu from "../Menus/MobileMenu";
 
 export default function MainHeader() {
   const categories = ["NEWS", "PEOPLE", "PLACES", "COMMUNITY"];
@@ -53,6 +54,7 @@ export default function MainHeader() {
               <span className="translate-x-8">Our community.</span>
             </div>
           </div>
+          <MobileMenu />
         </PageContainer>
       </div>
     </div>

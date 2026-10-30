@@ -130,7 +130,7 @@ export default async function BusinessDetailView({ params }: Props) {
             </div>
             <div>
               <Image
-                src={business.image as string}
+                src={business.image || '/images/business-placeholder.svg'}
                 alt={business.name}
                 width={1000}
                 height={1000}
