@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import AdminBusinessMenus from "@/features/Business/components/AdminBusinessMenus";
-import { CastleIcon, LayoutDashboardIcon } from "lucide-react";
+import { CastleIcon, LayoutDashboardIcon, PartyPopperIcon } from "lucide-react";
 import Link from "next/link";
 import AdminSiteMenuItems from "./AdminSiteMenuItems";
 
@@ -40,6 +40,14 @@ export default function AdminSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <AdminBusinessMenus />
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip={"dashboard"}>
+              <Link href={"/admin/events"}>
+                <PartyPopperIcon />
+                <span>Events</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarGroup>
         <AdminSiteMenuItems />
       </SidebarContent>

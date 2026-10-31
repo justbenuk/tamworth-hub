@@ -1,0 +1,54 @@
+enum EventCategory {
+  FAMILY_KIDS
+  MUSIC_NIGHTLIFE
+  MARKETS_SHOPPING
+  FOOD_DRINK
+  ARTS_CULTURE
+  SPORTS_FITNESS
+  COMMUNITY_CHARITY
+  FESTIVALS_FAIRS
+}
+
+enum EventStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  CANCELLED
+}
+
+model Event {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  description String        @db.Text
+
+  image       String?
+
+  category    EventCategory
+
+  startDate   DateTime
+  endDate     DateTime?
+
+  venue       String
+  address     String?
+  postcode    String?
+
+  organiser   String?
+  websiteUrl  String?
+
+  isFree      Boolean       @default(true)
+  price       String?
+
+  status      EventStatus   @default(PENDING)
+  isFeatured  Boolean @default(false)
+
+  userId String @default("NXJiJ2nXpm6GL8tGzJLYo0tWbb6NaH5e")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([startDate, status])
+  @@index([category])
+  @@index([userId])
+}

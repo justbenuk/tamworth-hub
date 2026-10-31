@@ -30,7 +30,7 @@ export default function AllBusinessesTable({
       field: 'image',
       cellRenderer: (row: ICellRendererParams) => (
         <div className="h-full flex items-center">
-          <Image src={row.data.image} alt={row.data.name} width={50} height={50} />
+          <Image src={row.data.image || '/images/business-placeholder.svg'} alt='business image' width={50} height={50} />
         </div>
       )
     },

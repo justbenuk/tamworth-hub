@@ -109,33 +109,37 @@ export default async function BusinessesPage({
 
   return (
     <PageContainer className="py-10">
-      <div className="grid gap-10">
-        <div>
-          <BusinessSearch
-            title="Find local businesses in Tamworth"
-            description="Discover local shops, tradespeople, restaurants and services across Tamworth."
-            action="/businesses"
-            placeholder="Search businesses..."
-            search={search}
-            category={category}
-            location={location}
-            locations={locations}
-            categories={categories.map((item) => ({
-              label: item.name,
-              value: item.slug,
-            }))}
-            popularSearches={[
-              "Plumber",
-              "Electrician",
-              "Hairdresser",
-              "Restaurant",
-              "Takeaway",
-              "Car Garage",
-              "Gardener",
-            ]}
-          />
+      <div className="grid gap-6">
 
+        <div className="space-y-3">
+          <p className="text-primary text-sm font-semibold uppercase tracking-widest">
+            Explore Tamworth
+          </p>
+          <h1>Find local businesses in Tamworth</h1>
+
+          <p className="text-lead">Discover local shops, tradespeople, restaurants and services across Tamworth.</p>
         </div>
+        <BusinessSearch
+          action="/businesses"
+          placeholder="Search businesses..."
+          search={search}
+          category={category}
+          location={location}
+          locations={locations}
+          categories={categories.map((item) => ({
+            label: item.name,
+            value: item.slug,
+          }))}
+          popularSearches={[
+            "Plumber",
+            "Electrician",
+            "Hairdresser",
+            "Restaurant",
+            "Takeaway",
+            "Car Garage",
+            "Gardener",
+          ]}
+        />
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {businesses.map((business) => (
