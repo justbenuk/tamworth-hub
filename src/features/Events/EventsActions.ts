@@ -82,9 +82,10 @@ export async function FetchAllPublishedEvents() {
         gte: today,
       }
     },
-    orderBy: {
-      isFeatured: 'desc'
-    }
+    orderBy: [
+      { isFeatured: 'desc' },
+      { startDate: 'asc' },
+    ]
   })
 }
 
