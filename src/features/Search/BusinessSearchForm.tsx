@@ -17,8 +17,6 @@ type Option = {
 };
 
 type DirectorySearchProps = {
-  title: string;
-  description: string;
   action: string;
   placeholder?: string;
   search?: string;
@@ -30,8 +28,6 @@ type DirectorySearchProps = {
 };
 
 export default function BusinessSearch({
-  title,
-  description,
   action,
   placeholder = "Search...",
   search = "",
@@ -42,21 +38,7 @@ export default function BusinessSearch({
   popularSearches = [],
 }: DirectorySearchProps) {
   return (
-    <section className="space-y-6 py-8">
-      {/* Heading */}
-      <div className="space-y-3">
-        <p className="text-primary text-sm font-semibold uppercase tracking-widest">
-          Explore Tamworth
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-          {title}
-        </h1>
-
-        <p className="text-muted-foreground">
-          {description}
-        </p>
-      </div>
+    <section className="space-y-6">
 
       {/* Search form */}
       <form
@@ -80,7 +62,6 @@ export default function BusinessSearch({
         {categories.length > 0 && (
           <div className="relative lg:w-56">
             <LayoutGrid className="absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
-
             <select
               name="category"
               aria-label="Business category"
@@ -137,7 +118,7 @@ export default function BusinessSearch({
       {/* Popular searches */}
       {popularSearches.length > 0 && (
         <div className="space-y-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
             Popular searches
           </p>
 

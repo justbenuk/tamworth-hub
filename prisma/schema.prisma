@@ -28,6 +28,8 @@ model User {
   members       Member[]
   invitations   Invitation[]
 
+  events Event[]
+
   @@unique([email])
   @@map("user")
 }
