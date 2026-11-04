@@ -9,6 +9,7 @@ import { requireUser } from "@/lib/sesstions";
 import Image from "next/image";
 import { format } from "date-fns";
 import ProfileImageUploadButton from "@/features/Profile/Components/ProfileImageUploadButton";
+import ChangePasswordForm from "@/features/auth/forms/ChangePasswordForm";
 
 export default async function ProfilePage() {
   const user = await requireUser();
@@ -23,13 +24,13 @@ export default async function ProfilePage() {
               alt="Profile Image"
               width={500}
               height={500}
-              className="object-cover size-52"
+              className="object-cover w-full rounded-lg"
             />
             <ProfileImageUploadButton />
           </CardContent>
         </Card>
       </div>
-      <div className="col-span-1 md:col-span-2">
+      <div className="col-span-1 md:col-span-2 space-y-8">
         <Card>
           <CardHeader>
             <CardTitle className="font-semibold text-xl">
@@ -57,6 +58,15 @@ export default async function ProfilePage() {
               <span>{format(user.createdAt, "dd/MM/yyyy")}</span>
             </div>
           </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Change Password</CardTitle>
+            <CardDescription>Manage your password</CardDescription>
+            <CardContent>
+              <ChangePasswordForm />
+            </CardContent>
+          </CardHeader>
         </Card>
       </div>
     </div>

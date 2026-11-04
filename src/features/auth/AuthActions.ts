@@ -1,7 +1,11 @@
 "use server";
 
 import z from "zod";
-import { LoginSchema, RegisterSchema } from "./AuthSchema";
+import {
+  ChangePasswordSchema,
+  LoginSchema,
+  RegisterSchema,
+} from "./AuthSchema";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -39,5 +43,23 @@ export async function RegisterUserAction(
   } catch (error) {
     console.error(error);
     return { success: false, message: "Failed to register" };
+  }
+}
+
+export async function ChangePassworAction(
+  values: z.infer<typeof ChangePasswordSchema>,
+) {
+  try {
+    const validated = ChangePasswordSchema.parse(values);
+    await auth.api.changePassword({
+      body: {
+        ...validated,
+      },
+      headers: await headers(),
+    });
+    return { success: true, message: "Password Changed" };
+  } catch (error) {
+    console.error(`Change Password Error: ${error}`);
+    return { success: false, message: "Failed to chnage password" };
   }
 }
