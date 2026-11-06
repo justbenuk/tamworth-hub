@@ -11,20 +11,110 @@ datasource db {
   provider = "postgresql"
 }
 
+//----------------------------------------------------------
+//
+// Business Models
+//
+// ---------------------------------------------------------
+model Business {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+
+  // Contact details
+  email   String?
+  phone   String?
+  website String?
+
+  //images
+  image String?
+
+  // Location
+  addressLine1 String?
+  addressLine2 String?
+  town         String? @default("Tamworth")
+  postcode     String?
+
+  // Listing status
+  isPublished Boolean @default(false)
+  isFeatured  Boolean @default(false)
+
+  // Category assignments
+  categories BusinessCategoryAssignment[]
+
+  //owner - we use this for claming
+  ownerId String?
+  owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isPublished, name])
+}
+
+//----------------------------------------------------------
+//
+// Business Categories Models
+//
+// ---------------------------------------------------------
+model BusinessCategory {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String
+  description String?
+  icon        String?
+
+  parentId String?
+  parent   BusinessCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
+  children BusinessCategory[] @relation("CategoryHierarchy")
+
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  businessCategoryAssignments BusinessCategoryAssignment[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([isActive, sortOrder])
+}
+
+model BusinessCategoryAssignment {
+  businessId String
+  categoryId String
+
+  business Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  category BusinessCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([businessId, categoryId])
+  @@index([categoryId])
+}
+
+//----------------------------------------------------------
+//
+// User Models
+//
+// ---------------------------------------------------------
+
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean    @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   role          String?
-  banned        Boolean?  @default(false)
+  banned        Boolean?   @default(false)
   banReason     String?
   banExpires    DateTime?
   sessions      Session[]
   accounts      Account[]
+  businesses    Business[]
 
   @@unique([email])
   @@map("user")

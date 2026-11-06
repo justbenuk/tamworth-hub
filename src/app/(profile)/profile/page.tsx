@@ -13,7 +13,6 @@ import ChangePasswordForm from "@/features/auth/forms/ChangePasswordForm";
 
 export default async function ProfilePage() {
   const user = await requireUser();
-  console.log(user);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
       <div className="col-span-1">
@@ -63,7 +62,7 @@ export default async function ProfilePage() {
           <CardHeader>
             <CardTitle>Change Password</CardTitle>
             <CardDescription>Manage your password</CardDescription>
-            <CardContent>
+            <CardContent className="p-0">
               <ChangePasswordForm />
             </CardContent>
           </CardHeader>
