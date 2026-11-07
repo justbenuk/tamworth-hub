@@ -1,6 +1,12 @@
 allowBuilds:
   '@prisma/engines': true
+  builds: true
   msgpackr-extract: true
   prisma: true
   sharp: false
   unrs-resolver: false
+permissions:
+  builds:
+    skills: true
+  esbuild:
+    build: true

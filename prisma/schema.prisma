@@ -62,7 +62,7 @@ model Business {
 model BusinessCategory {
   id          String  @id @default(cuid())
   name        String
-  slug        String
+  slug        String  @unique
   description String?
   icon        String?
 

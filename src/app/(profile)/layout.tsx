@@ -1,5 +1,6 @@
 import MainFooter from "@/components/Footers/MainFooter";
 import MainHeader from "@/components/Headers/MainHeader";
+import TopHeader from "@/components/Headers/TopHeader";
 import MainMenu from "@/components/Menus/MainMenu";
 import ProfileMenu from "@/components/Menus/ProfileMenu";
 import PageContainer from "@/components/Page/PageContainer";
@@ -11,11 +12,11 @@ type BaseLayout = {
 };
 
 export default async function ProfileLayout({ children }: BaseLayout) {
-  const user = await requireUser();
-
+  await requireUser();
   return (
     <div className="min-h-screen flex flex-col -center justify-between">
       <div className="border-b">
+        <TopHeader />
         <MainHeader />
         <MainMenu />
       </div>
