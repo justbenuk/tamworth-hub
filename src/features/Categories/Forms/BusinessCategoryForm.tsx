@@ -20,7 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { HugeiconsIcon, Pencil } from "@hugeicons/core-free-icons";
+import { Pencil, Plus } from "@hugeicons/core-free-icons";
 import {
   Field,
   FieldContent,
@@ -38,6 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 type BusinessCategoryProps =
   | {
@@ -85,9 +86,10 @@ export default function BusinessCategoryForm(props: BusinessCategoryProps) {
 
   async function handleForm(values: z.infer<typeof BusinessCategorySchema>) {
     try {
-      const response = isEditing
-        ? await UpdateBusinessCategory(props.category.id, values)
-        : await AddBusinessCategory(values);
+      const response =
+        props.mode === "edit"
+          ? await UpdateBusinessCategory(props.category.id, values)
+          : await AddBusinessCategory(values);
 
       if (response.success) {
         toast.add({
@@ -106,16 +108,33 @@ export default function BusinessCategoryForm(props: BusinessCategoryProps) {
       });
     } catch {
       toast.add({
-        description: isEditing
-          ? "Failed to update category"
-          : "Failed to add category",
+        description:
+          props.mode === "edit"
+            ? "Failed to update category"
+            : "Failed to add category",
       });
     }
   }
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger render={<Button />}>
-        {isEditing ? <span>edit</span> : <span>Add</span>}
+      <AlertDialogTrigger
+        render={
+          <Button
+            variant={!isEditing ? "default" : "ghost"}
+            size={!isEditing ? "default" : "icon-sm"}
+          />
+        }
+      >
+        {isEditing ? (
+          <>
+            <HugeiconsIcon icon={Pencil} />
+          </>
+        ) : (
+          <>
+            <HugeiconsIcon icon={Plus} />
+            <span>Category</span>
+          </>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <form onSubmit={form.handleSubmit(handleForm)} className="grid gap-3">

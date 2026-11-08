@@ -13,6 +13,23 @@ datasource db {
 
 //----------------------------------------------------------
 //
+// Opening Hours Models
+//
+// ---------------------------------------------------------
+
+model OpeningHour {
+  id String @id @default(cuid())
+
+  dayOfWeek Int
+  openTime  String
+  closeTime String
+
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+//----------------------------------------------------------
+//
 // Business Models
 //
 // ---------------------------------------------------------
@@ -47,9 +64,14 @@ model Business {
   ownerId String?
   owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
 
+  //map location
+  latitude  Decimal? @db.Decimal(9, 6)
+  longitude Decimal? @db.Decimal(9, 6)
+
   // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  openingHours OpeningHour[]
 
   @@index([isPublished, name])
 }

@@ -18,9 +18,5 @@ export default function PageContainer({
   className,
   size = "large",
 }: PageContainerProps) {
-  return (
-    <div className={cn("px-6 2xl:px-0", className, sizes[size])}>
-      {children}
-    </div>
-  );
+  return <div className={cn("px-6", className, sizes[size])}>{children}</div>;
 }
