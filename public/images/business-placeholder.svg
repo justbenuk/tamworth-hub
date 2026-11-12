@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#f1f3ef"/>
+  <g fill="none" stroke="#7a8876" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M425 340h350v260H425z"/>
+    <path d="M410 340l45-100h290l45 100M410 340c0 50 76 50 76 0 0 50 76 50 76 0 0 50 76 50 76 0 0 50 76 50 76 0 0 50 76 50 76 0"/>
+    <path d="M565 600V440h95v160M465 440h60v65h-60zM700 440h35v65h-35z"/>
+  </g>
+  <text x="600" y="690" text-anchor="middle" font-family="sans-serif" font-size="30" fill="#52634e">Tamworth independent business</text>
+</svg>

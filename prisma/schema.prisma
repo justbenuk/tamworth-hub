@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//----------------------------------------------------------
+//
+// Opening Hours Models
+//
+// ---------------------------------------------------------
+
+model OpeningHour {
+  id String @id @default(cuid())
+
+  dayOfWeek Int
+  openTime  String
+  closeTime String
+
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+//----------------------------------------------------------
+//
+// Business Models
+//
+// ---------------------------------------------------------
+model Business {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+
+  // Contact details
+  email   String?
+  phone   String?
+  website String?
+
+  //images
+  image String?
+
+  // Location
+  addressLine1 String?
+  addressLine2 String?
+  town         String? @default("Tamworth")
+  postcode     String?
+
+  // Listing status
+  isPublished Boolean @default(false)
+  isFeatured  Boolean @default(false)
+
+  // Category assignments
+  categories BusinessCategoryAssignment[]
+
+  //owner - we use this for claming
+  ownerId String?
+  owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+
+  //map location
+  latitude  Decimal? @db.Decimal(9, 6)
+  longitude Decimal? @db.Decimal(9, 6)
+
+  // Timestamps
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  openingHours OpeningHour[]
+
+  @@index([isPublished, name])
+}
+
+//----------------------------------------------------------
+//
+// Business Categories Models
+//
+// ---------------------------------------------------------
+model BusinessCategory {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  icon        String?
+
+  parentId String?
+  parent   BusinessCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
+  children BusinessCategory[] @relation("CategoryHierarchy")
+
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  businessCategoryAssignments BusinessCategoryAssignment[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([isActive, sortOrder])
+}
+
+model BusinessCategoryAssignment {
+  businessId String
+  categoryId String
+
+  business Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  category BusinessCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([businessId, categoryId])
+  @@index([categoryId])
+}
+
+//----------------------------------------------------------
+//
+// User Models
+//
+// ---------------------------------------------------------
+
+model User {
+  id            String     @id
+  name          String
+  email         String
+  emailVerified Boolean    @default(false)
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  role          String?
+  banned        Boolean?   @default(false)
+  banReason     String?
+  banExpires    DateTime?
+  sessions      Session[]
+  accounts      Account[]
+  businesses    Business[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id             String   @id
+  expiresAt      DateTime
+  token          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impersonatedBy String?
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
