@@ -10,14 +10,15 @@ import {
 import { FetchAllBusinessesAction } from "@/features/Businesses/BusinessActions";
 import AllBusinessesTable from "@/features/Businesses/Tables/AllBusinessesTable";
 import { requireAdmin } from "@/lib/sesstions";
-import { Check, Factory, Plus, Star } from "@hugeicons/core-free-icons";
+import { Check, Factory, Star } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { Metadata } from "next";
-import Link from "next/link";
+
 export const metadata: Metadata = {
   title: "All Businesses",
 };
 export default async function DashboardBusinessesPage() {
+  await requireAdmin();
   const businesses = await FetchAllBusinessesAction();
   const total = businesses.length;
   const claimed = businesses.filter((business) => business.ownerId).length;
@@ -74,13 +75,6 @@ export default async function DashboardBusinessesPage() {
             <CardTitle className="font-semibold text-xl">Businesses</CardTitle>
             <CardDescription>Manage all businesses</CardDescription>
           </div>
-          <Button
-            nativeButton={false}
-            render={<Link href={"/dashboard/businesses/new"} />}
-          >
-            <HugeiconsIcon icon={Plus} />
-            <span>Business</span>
-          </Button>
         </CardHeader>
         <CardContent>
           <AllBusinessesTable businesses={businesses} />

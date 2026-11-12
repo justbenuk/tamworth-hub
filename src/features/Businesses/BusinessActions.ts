@@ -10,6 +10,57 @@ import { notFound } from "next/navigation";
 
 const path = "/dashboard/businesses";
 
+export async function FetchPublishedFeaturedBusinessesAction() {
+  return db.business.findMany({
+    where: {
+      isFeatured: true,
+      isPublished: true,
+    },
+    take: 8,
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
+  });
+}
+
+export async function FetchBusinessBySlugAction(slug: string) {
+  const business = await db.business.findUnique({
+    where: { slug },
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+      openingHours: true,
+    },
+  });
+
+  if (!business?.isPublished) {
+    return notFound();
+  }
+
+  return business;
+}
+
+export async function DeleteBusinessByIdAction(id: string) {
+  await requireAdmin();
+  try {
+    await db.business.delete({
+      where: { id },
+    });
+
+    return { success: true, message: "Business Deleted" };
+  } catch (error) {
+    console.error("Business Action: ", error);
+    return { success: false, message: "Failed to delete business" };
+  }
+}
+
 export async function FetchBusinessById({ id }: { id: string }) {
   await requireUser();
   const business = await db.business.findUnique({

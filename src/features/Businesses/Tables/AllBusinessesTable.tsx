@@ -9,6 +9,7 @@ import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
+import DeleteBusinessForm from "../Forms/DeleteBusinessForm";
 
 type BusinessRow = Omit<Business, "latitude" | "longitude"> & {
   latitude: number | null;
@@ -76,6 +77,7 @@ export default function AllBusinessesTable({
           >
             <HugeiconsIcon icon={Pencil} />
           </Button>
+          <DeleteBusinessForm id={row.data.id} />
         </div>
       ),
     },

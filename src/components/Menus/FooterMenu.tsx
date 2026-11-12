@@ -4,12 +4,10 @@ import Link from "next/link";
 export default function FooterMenu() {
   return (
     <div className="space-y-4">
-      <h2 className="font-semibold text-2xl border-b border-primary py-2">
-        Menu
-      </h2>
-      <nav className="grid grid-cols-2 gap-2">
+      <h2 className="text-sm font-semibold tracking-wide text-background">Explore</h2>
+      <nav aria-label="Footer navigation" className="flex flex-col gap-2.5 text-sm text-background/65">
         {SITEMENUITEMS.map((item) => (
-          <Link href={item.link} key={item.link}>
+          <Link href={item.link} key={item.link} className="w-fit transition-colors hover:text-background">
             {item.name}
           </Link>
         ))}

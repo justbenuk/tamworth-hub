@@ -59,6 +59,7 @@ export default function DashboardSidebar() {
                     <SidebarMenuSubItem>
                       <SidebarMenuButton
                         render={<Link href={"/dashboard/businesses/new"} />}
+                        size={"sm"}
                       >
                         <HugeiconsIcon icon={Plus} />
                         <span>Add Business</span>
@@ -69,6 +70,7 @@ export default function DashboardSidebar() {
                     <SidebarMenuSubItem>
                       <SidebarMenuButton
                         render={<Link href={"/dashboard/businesses"} />}
+                        size={"sm"}
                       >
                         <HugeiconsIcon icon={Factory} />
                         <span>All Businesses</span>
@@ -81,6 +83,7 @@ export default function DashboardSidebar() {
                         render={
                           <Link href={"/dashboard/businesses/categories"} />
                         }
+                        size={"sm"}
                       >
                         <HugeiconsIcon icon={List} />
                         <span>Categories</span>

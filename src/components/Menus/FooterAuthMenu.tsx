@@ -3,26 +3,20 @@ import { headers } from "next/headers";
 import Link from "next/link";
 
 export default async function FooterAuthMenu() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await auth.api.getSession({ headers: await headers() });
   return (
     <div className="space-y-4">
-      <h2 className="font-semibold text-2xl border-b border-primary py-2">
-        Account
-      </h2>
-      <nav className="flex flex-col space-y-2">
+      <h2 className="text-sm font-semibold tracking-wide text-background">Your account</h2>
+      <nav aria-label="Account" className="flex flex-col gap-2.5 text-sm text-background/65">
         {!session?.user ? (
           <>
-            <Link href={"/login"}>Login</Link>
-            <Link href={"/register"}>Register</Link>
+            <Link href="/login" className="w-fit transition-colors hover:text-background">Log in</Link>
+            <Link href="/register" className="w-fit transition-colors hover:text-background">Create an account</Link>
           </>
         ) : (
           <>
-            <Link href={"/login"}>Your Profile</Link>
-            <Link href={"/register"}>Your Business</Link>
-            <Link href={"/register"}>Your Events</Link>
-            <Link href={"/register"}>Your Jobs</Link>
+            <Link href="/profile" className="w-fit transition-colors hover:text-background">Your profile</Link>
+            {session.user.role === "admin" && <Link href="/dashboard" className="w-fit transition-colors hover:text-background">Dashboard</Link>}
           </>
         )}
       </nav>
