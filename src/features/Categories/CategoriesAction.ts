@@ -8,6 +8,18 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
 
+export async function FetchBusinessPartentCategoriesAction() {
+  return db.businessCategory.findMany({
+    where: {
+      parentId: null,
+      isActive: true,
+    },
+    orderBy: {
+      sortOrder: "asc",
+    },
+  });
+}
+
 async function saveCategory(
   values: z.input<typeof BusinessCategorySchema>,
   id?: string,

@@ -15,7 +15,7 @@ export async function LoginUserAction(values: z.infer<typeof LoginSchema>) {
     await auth.api.signInEmail({
       body: {
         email: validated.email,
-        password: validated.email,
+        password: validated.password,
       },
       headers: await headers(),
     });

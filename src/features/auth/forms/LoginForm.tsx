@@ -81,7 +81,7 @@ export default function LoginForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field>
-                <FieldLabel>Email</FieldLabel>
+                <FieldLabel>Password</FieldLabel>
                 <FieldContent>
                   <Input {...field} type="password" />
                 </FieldContent>

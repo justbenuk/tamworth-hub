@@ -1,20 +1,14 @@
 import Link from "next/link";
 
 export default function SiteLogo() {
-  const categories = ["NEWS", "PEOPLE", "PLACES", "COMMUNITY"];
   return (
-    <Link href="/" className="shrink-0">
-      <div className="sm:text-4xl lg:text-6xl text-black dark:text-white font-semibold">
-        TAMWORTH <span className="text-primary">HUB</span>
-      </div>
-      <div className="mt-2 hidden md:flex flex-wrap items-center gap-x-2 text-[9px] font-semibold tracking-[0.24em] text-black dark:text-white sm:gap-x-3 sm:text-[11px]">
-        {categories.map((category, index) => (
-          <span key={category} className="flex items-center gap-x-2 sm:gap-x-3">
-            {index > 0 && <span className="text-neutral-500">|</span>}
-            {category}
-          </span>
-        ))}
-      </div>
+    <Link href="/" aria-label="Tamworth Hub home" className="group inline-flex shrink-0 flex-col">
+      <span className="text-2xl font-bold tracking-[-0.06em] text-foreground sm:text-3xl">
+        Tamworth <span className="text-primary transition-colors group-hover:text-primary/80">Hub</span>
+      </span>
+      <span className="mt-0.5 text-[10px] font-medium tracking-[0.14em] text-muted-foreground sm:text-xs">
+        YOUR TOWN. OUR COMMUNITY.
+      </span>
     </Link>
   );
 }

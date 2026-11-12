@@ -13,7 +13,7 @@ export const SITEMENUITEMS = [
   },
   {
     name: "Directory",
-    link: "/directory",
+    link: "/businesses",
   },
   {
     name: "Jobs",
