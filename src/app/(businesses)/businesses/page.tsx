@@ -85,7 +85,7 @@ export default function AllBusinessesPage() {
             <HugeiconsIcon icon={ArrowRight} className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <ParentCategoryList />
         </div>
       </section>
