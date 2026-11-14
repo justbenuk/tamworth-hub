@@ -7,8 +7,64 @@ import { BusinessSchema } from "./BusinessSchema";
 import slugify from "slugify";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
+import { Prisma } from "@prisma/client";
 
 const path = "/dashboard/businesses";
+
+const PAGE_SIZE = 12;
+
+export async function FetchAllPublishedBusinesses({
+  search = "",
+  category = "",
+  curser,
+}: {
+  search?: string;
+  category?: string;
+  curser?: string;
+}) {
+  const term = search.trim().slice(0, 100);
+  const where: Prisma.BusinessWhereInput = {
+    isPublished: true,
+    ...(category
+      ? { categories: { some: { category: { slug: category } } } }
+      : {}),
+    ...(term
+      ? {
+          OR: [
+            { name: { contains: term, mode: "insensitive" } },
+            {
+              categories: {
+                some: {
+                  category: { name: { contains: term, mode: "insensitive" } },
+                },
+              },
+            },
+          ],
+        }
+      : {}),
+  };
+
+  const data = await db.business.findMany({
+    where,
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
+    orderBy: [{ name: "asc" }, { id: "asc" }],
+    take: PAGE_SIZE + 1,
+    ...(curser ? { cursor: { id: curser }, skip: 1 } : {}),
+  });
+
+  const hasMore = data.length > PAGE_SIZE;
+  const businesses = data.slice(0, PAGE_SIZE);
+  return {
+    businesses,
+    nextCurser: hasMore ? businesses[businesses.length - 1].id : null,
+  };
+}
 
 export async function FetchPublishedFeaturedBusinessesAction() {
   return db.business.findMany({
