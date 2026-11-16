@@ -20,6 +20,43 @@ export async function FetchBusinessPartentCategoriesAction() {
   });
 }
 
+export async function FetchBusinessesByCategoryAction(slug: string) {
+  return db.businessCategory.findUnique({
+    where: {
+      slug,
+      isActive: true,
+    },
+    include: {
+      businessCategoryAssignments: {
+        where: { business: { isPublished: true } },
+        include: {
+          business: {
+            include: {
+              categories: { include: { category: true } },
+            },
+          },
+        },
+      },
+      children: {
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+        include: {
+          businessCategoryAssignments: {
+            where: { business: { isPublished: true } },
+            include: {
+              business: {
+                include: {
+                  categories: { include: { category: true } },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
 async function saveCategory(
   values: z.input<typeof BusinessCategorySchema>,
   id?: string,
