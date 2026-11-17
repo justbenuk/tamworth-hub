@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { FetchAllPublishedBusinesses } from "@/features/Businesses/BusinessActions";
 import BusinessCard from "@/features/Businesses/Components/BusinessCard";
 import { ArrowRight, Search } from "@hugeicons/core-free-icons";
@@ -5,6 +6,10 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export const metadata: Metadata = {
+  title: "Find a local business",
+};
 
 export default async function AllBusinessesPage({
   searchParams,
@@ -37,12 +42,18 @@ export default async function AllBusinessesPage({
           community special.
         </p>
 
-        <form action="/businesses/all" className="mt-7 flex max-w-2xl flex-col gap-3 sm:flex-row">
+        <form
+          action="/businesses/all"
+          className="mt-7 flex max-w-2xl flex-col gap-3 sm:flex-row"
+        >
           <label htmlFor="business-search" className="sr-only">
             Search businesses
           </label>
           <div className="flex min-h-12 flex-1 items-center gap-3 rounded-md border bg-background px-4 shadow-sm focus-within:ring-2 focus-within:ring-ring">
-            <HugeiconsIcon icon={Search} className="size-5 shrink-0 text-muted-foreground" />
+            <HugeiconsIcon
+              icon={Search}
+              className="size-5 shrink-0 text-muted-foreground"
+            />
             <input
               id="business-search"
               name="search"
@@ -64,8 +75,13 @@ export default async function AllBusinessesPage({
       <section aria-labelledby="business-results-heading" className="space-y-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="mb-2 text-sm font-medium text-primary">The local directory</p>
-            <h2 id="business-results-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            <p className="mb-2 text-sm font-medium text-primary">
+              The local directory
+            </p>
+            <h2
+              id="business-results-heading"
+              className="text-2xl font-semibold tracking-tight sm:text-3xl"
+            >
               {search ? `Results for “${search}”` : "All businesses"}
             </h2>
             <p className="mt-2 text-muted-foreground">
@@ -75,7 +91,10 @@ export default async function AllBusinessesPage({
             </p>
           </div>
           {search && (
-            <Link href="/businesses/all" className="text-sm font-medium text-primary hover:underline">
+            <Link
+              href="/businesses/all"
+              className="text-sm font-medium text-primary hover:underline"
+            >
               Clear search
             </Link>
           )}
@@ -91,7 +110,8 @@ export default async function AllBusinessesPage({
           <div className="rounded-2xl border border-dashed bg-card px-6 py-14 text-center">
             <h3 className="text-lg font-semibold">No matches yet</h3>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-              Try searching for a business name or category, or browse the full directory.
+              Try searching for a business name or category, or browse the full
+              directory.
             </p>
           </div>
         )}

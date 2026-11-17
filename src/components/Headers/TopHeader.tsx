@@ -9,23 +9,40 @@ export default async function TopHeader() {
   const today = new Date();
 
   return (
-    <div className="bg-foreground py-2 text-background">
+    <div className="bg-background py-2">
       <PageContainer>
         <div className="flex items-center justify-between gap-4 text-xs sm:text-sm">
-          <p className="truncate text-background/75">Local stories, places and people from around Tamworth</p>
+          <p className="truncate">
+            Local stories, places and people from around Tamworth
+          </p>
           <div className="flex shrink-0 items-center gap-4">
-            <time className="hidden text-background/65 sm:block" dateTime={today.toISOString()}>
+            <time className="hidden sm:block" dateTime={today.toISOString()}>
               {format(today, "EEEE, d MMMM")}
             </time>
             {session?.user ? (
               <div className="flex items-center gap-3">
-                <Link href="/profile" className="transition-colors hover:text-primary-foreground/70">Profile</Link>
+                <Link
+                  href="/profile"
+                  className="transition-colors hover:text-primary-foreground/70"
+                >
+                  Profile
+                </Link>
                 {session.user.role === "admin" && (
-                  <Link href="/dashboard" className="transition-colors hover:text-primary-foreground/70">Dashboard</Link>
+                  <Link
+                    href="/dashboard"
+                    className="transition-colors hover:text-primary-foreground/70"
+                  >
+                    Dashboard
+                  </Link>
                 )}
               </div>
             ) : (
-              <Link href="/login" className="rounded-full bg-background/10 px-3 py-1 transition-colors hover:bg-background/20">Login</Link>
+              <Link
+                href="/login"
+                className="rounded-full bg-background/10 px-3 py-1 transition-colors hover:bg-background/20"
+              >
+                Login
+              </Link>
             )}
           </div>
         </div>
