@@ -141,10 +141,9 @@ export async function UpdateBusinessCategory(
 }
 
 export async function FetchAllBusinessCategoriesAction() {
-  await requireAdmin();
   return db.businessCategory.findMany({
     orderBy: {
-      sortOrder: "asc",
+      name: "asc",
     },
     include: {
       _count: {
